@@ -38,9 +38,9 @@ def _gamut_clip_oklch(L: float, C: float, h: float, alpha: float) -> Color:
     from .color import Color as _C
     from .gamut import map_to_gamut
     if L <= 0.0:
-        return _C._from_linear(0.0, 0.0, 0.0, alpha)
+        return _C.from_linear_rgb(0.0, 0.0, 0.0, alpha)
     if L >= 1.0:
-        return _C._from_linear(1.0, 1.0, 1.0, alpha)
+        return _C.from_linear_rgb(1.0, 1.0, 1.0, alpha)
     raw = _C.from_oklch(L, C, h, alpha)
     return map_to_gamut(raw)
 

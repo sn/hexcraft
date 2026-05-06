@@ -235,3 +235,15 @@ def test_cli_contrast_passes():
 def test_cli_closest():
     out = _run(["closest", "#ff1010", "red", "blue", "green"])
     assert "#ff0000" in out
+
+
+def test_cli_bad_input_exits_cleanly():
+    """Bad color string should exit 2 with a stderr message, not a traceback."""
+    err_buf = io.StringIO()
+    out_buf = io.StringIO()
+    from contextlib import redirect_stderr
+    with redirect_stdout(out_buf), redirect_stderr(err_buf):
+        rc = cli_main(["inspect", "not-a-color"])
+    assert rc == 2
+    assert "hexcraft" in err_buf.getvalue()
+    assert "not-a-color" in err_buf.getvalue()

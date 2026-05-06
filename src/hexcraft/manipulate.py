@@ -28,7 +28,7 @@ def mix(a: Color, b: Color, t: float = 0.5,
     if space == "linear-rgb":
         ar, ag, ab = a.linear_rgb
         br, bg, bb = b.linear_rgb
-        return Color._from_linear(_lerp(ar, br, t), _lerp(ag, bg, t), _lerp(ab, bb, t), _lerp(a.alpha, b.alpha, t))
+        return Color.from_linear_rgb(_lerp(ar, br, t), _lerp(ag, bg, t), _lerp(ab, bb, t), _lerp(a.alpha, b.alpha, t))
     if space == "srgb":
         ar, ag, ab = a.srgb
         br, bg, bb = b.srgb
@@ -74,10 +74,10 @@ def blend(bg: Color, fg: Color) -> Color:
     af, ab = fg.alpha, bg.alpha
     out_a = af + ab * (1.0 - af)
     if out_a == 0.0:
-        return Color._from_linear(0.0, 0.0, 0.0, 0.0)
+        return Color.from_linear_rgb(0.0, 0.0, 0.0, 0.0)
     fr, fg_, fb = fg.linear_rgb
     br, bg_, bb = bg.linear_rgb
     out_r = (fr * af + br * ab * (1.0 - af)) / out_a
     out_g = (fg_ * af + bg_ * ab * (1.0 - af)) / out_a
     out_b = (fb * af + bb * ab * (1.0 - af)) / out_a
-    return Color._from_linear(out_r, out_g, out_b, out_a)
+    return Color.from_linear_rgb(out_r, out_g, out_b, out_a)

@@ -51,7 +51,12 @@ def _apca_y(c: Color) -> float:
 
 
 def apca_lc(text: Color, bg: Color) -> float:
-    """APCA Lc value (text on background). Sign preserved (+ light text on dark bg)."""
+    """APCA Lc value (text on background).
+
+    Follows the APCA-W3 sign convention: positive for dark text on a light
+    background, negative for light text on a dark background. Magnitude is
+    what most readability tables (e.g. Lc 60 for body text) refer to.
+    """
     y_txt = _apca_y(text)
     y_bg = _apca_y(bg)
     if y_txt < _BLK_THRS:
@@ -65,11 +70,11 @@ def apca_lc(text: Color, bg: Color) -> float:
         c = s * _SCALE_BoW
         if c < _LO_CLIP:
             return 0.0
-        out = -(c - _LO_BoW_OFFSET)
+        out = c - _LO_BoW_OFFSET
     else:
         s = (y_bg ** _REV_BG) - (y_txt ** _REV_TXT)
         c = s * _SCALE_WoB
         if c > -_LO_CLIP:
             return 0.0
-        out = -(c + _LO_WoB_OFFSET)
+        out = c + _LO_WoB_OFFSET
     return out * 100.0

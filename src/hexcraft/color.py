@@ -25,7 +25,7 @@ class Color:
 
     Construct via:
         Color("red") / Color("#ff0000") / Color("oklch(0.7 0.2 30)")
-        Color.from_rgb(255, 0, 0)
+        Color.from_rgb8(255, 0, 0)
         Color.from_oklch(0.628, 0.258, 29.2)
 
     Read components as properties (returns tuples in human-friendly units):
@@ -39,41 +39,49 @@ class Color:
             self._lr, self._lg, self._lb, self._a = value._lr, value._lg, value._lb, value._a
             return
         if isinstance(value, str):
-            r, g, b, a = _from_parsed(parsers.parse(value))
-            object.__setattr__(self, "_lr", r)
-            object.__setattr__(self, "_lg", g)
-            object.__setattr__(self, "_lb", b)
-            object.__setattr__(self, "_a", a)
+            self._lr, self._lg, self._lb, self._a = _from_parsed(parsers.parse(value))
             return
         if isinstance(value, tuple) and len(value) in (3, 4):
-            return self.__init__(Color.from_rgb(*value))  # type: ignore[misc]
+            r, g, b = value[0], value[1], value[2]
+            a = value[3] if len(value) == 4 else 1.0
+            self._lr, self._lg, self._lb = srgb.decode_rgb((r, g, b))
+            self._a = a
+            return
         raise TypeError(f"cannot construct Color from {type(value).__name__}")
-
-    @classmethod
-    def _from_linear(cls, r: float, g: float, b: float, a: float = 1.0) -> Color:
-        obj = cls.__new__(cls)
-        obj._lr, obj._lg, obj._lb, obj._a = r, g, b, a
-        return obj
 
     # ── Constructors ──────────────────────────────────────────────────────
 
     @classmethod
+    def from_linear_rgb(cls, r: float, g: float, b: float, a: float = 1.0) -> Color:
+        """Construct directly from linear sRGB without gamma decoding.
+
+        Values may fall outside [0, 1] to represent wide-gamut or HDR colors.
+        This is the lowest-level fast path used internally; prefer
+        ``from_rgb`` for gamma-encoded input.
+        """
+        obj = cls.__new__(cls)
+        obj._lr, obj._lg, obj._lb, obj._a = r, g, b, a
+        return obj
+
+    @classmethod
     def from_rgb(cls, r: float, g: float, b: float, a: float = 1.0) -> Color:
-        """Construct from gamma-encoded sRGB. Accepts 0–1 floats or 0–255 numbers."""
-        if r > 1.0 or g > 1.0 or b > 1.0:
-            r, g, b = r / 255.0, g / 255.0, b / 255.0
+        """Construct from gamma-encoded sRGB floats in [0, 1].
+
+        Wide-gamut values outside [0, 1] are preserved (no clamping). For 0-255
+        integer input use :meth:`from_rgb8` instead.
+        """
         lr, lg, lb = srgb.decode_rgb((r, g, b))
-        return cls._from_linear(lr, lg, lb, a)
+        return cls.from_linear_rgb(lr, lg, lb, a)
+
+    @classmethod
+    def from_rgb8(cls, r: int, g: int, b: int, a: float = 1.0) -> Color:
+        """Construct from integer sRGB in [0, 255] with float alpha in [0, 1]."""
+        return cls.from_rgb(r / 255.0, g / 255.0, b / 255.0, a)
 
     @classmethod
     def from_hex(cls, value: str) -> Color:
         """Construct from a hex string, with or without a leading ``#``."""
         return cls.parse(value if value.startswith("#") else f"#{value}")
-
-    @classmethod
-    def from_linear_rgb(cls, r: float, g: float, b: float, a: float = 1.0) -> Color:
-        """Construct directly from linear sRGB values (no gamma decoding)."""
-        return cls._from_linear(r, g, b, a)
 
     @classmethod
     def from_hsl(cls, h: float, s: float, l: float, a: float = 1.0) -> Color:
@@ -95,7 +103,7 @@ class Color:
         """Construct from CIE L*a*b*. L in [0, 100], a/b roughly in [-128, 128]."""
         x, y, z = lab.lab_to_xyz((L, a_, b))
         lr, lg, lb = xyz.xyz_to_linear_rgb((x, y, z))
-        return cls._from_linear(lr, lg, lb, alpha)
+        return cls.from_linear_rgb(lr, lg, lb, alpha)
 
     @classmethod
     def from_lch(cls, L: float, c: float, h: float, a: float = 1.0) -> Color:
@@ -106,7 +114,7 @@ class Color:
     def from_oklab(cls, L: float, a_: float, b: float, alpha: float = 1.0) -> Color:
         """Construct from OKLab. L in [0, 1], a/b roughly in [-0.4, 0.4]."""
         lr, lg, lb = oklab.oklab_to_linear_rgb((L, a_, b))
-        return cls._from_linear(lr, lg, lb, alpha)
+        return cls.from_linear_rgb(lr, lg, lb, alpha)
 
     @classmethod
     def from_oklch(cls, L: float, c: float, h: float, a: float = 1.0) -> Color:
@@ -117,7 +125,7 @@ class Color:
     def from_xyz(cls, x: float, y: float, z: float, a: float = 1.0) -> Color:
         """Construct from CIE XYZ tristimulus values (D65 reference white)."""
         lr, lg, lb = xyz.xyz_to_linear_rgb((x, y, z))
-        return cls._from_linear(lr, lg, lb, a)
+        return cls.from_linear_rgb(lr, lg, lb, a)
 
     @classmethod
     def from_p3(cls, r: float, g: float, b: float, a: float = 1.0, *, gamma: bool = True) -> Color:
@@ -125,7 +133,7 @@ class Color:
         lin = _p3.p3_decode((r, g, b)) if gamma else (r, g, b)
         x, y, z = _p3.linear_p3_to_xyz(lin)
         lr, lg, lb = xyz.xyz_to_linear_rgb((x, y, z))
-        return cls._from_linear(lr, lg, lb, a)
+        return cls.from_linear_rgb(lr, lg, lb, a)
 
     @classmethod
     def from_cmyk(cls, c: float, m: float, y: float, k: float, a: float = 1.0) -> Color:
@@ -275,7 +283,7 @@ class Color:
 
     def with_alpha(self, alpha: float) -> Color:
         """Return a new color with the alpha channel replaced."""
-        return type(self)._from_linear(self._lr, self._lg, self._lb, alpha)
+        return type(self).from_linear_rgb(self._lr, self._lg, self._lb, alpha)
 
     def lighten(self, amount: float) -> Color:
         """Increase OKLab lightness by ``amount`` (clamped to [0, 1])."""
@@ -311,7 +319,7 @@ class Color:
     def invert(self) -> Color:
         """Invert each linear sRGB component (``1 - c``)."""
         r, g, b = self.linear_rgb
-        return type(self)._from_linear(1.0 - r, 1.0 - g, 1.0 - b, self._a)
+        return type(self).from_linear_rgb(1.0 - r, 1.0 - g, 1.0 - b, self._a)
 
     def complement(self) -> Color:
         """Rotate hue by 180°."""

@@ -203,7 +203,7 @@ parse("oklch(0.7 0.15 250)")              # Parsed(space='oklch', components=(0.
 
 | Space          | Property             | Constructor                             |
 |----------------|----------------------|-----------------------------------------|
-| sRGB (gamma)   | `c.rgb`, `c.srgb`, `c.hex` | `Color.from_rgb(255, 0, 0)`         |
+| sRGB (gamma)   | `c.rgb`, `c.srgb`, `c.hex` | `Color.from_rgb8(255, 0, 0)`        |
 | Linear sRGB    | `c.linear_rgb`       | `Color.from_linear_rgb(1, 0, 0)`        |
 | HSL            | `c.hsl`              | `Color.from_hsl(0, 1, 0.5)`             |
 | HSV            | `c.hsv`              | `Color.from_hsv(0, 1, 1)`               |
@@ -455,9 +455,9 @@ passes_wcag(Color("#777"), Color("#fff"))                 # False (AA, normal te
 passes_wcag(Color("#777"), Color("#fff"), large=True)     # True (AA, large text)
 passes_wcag(Color("#777"), Color("#fff"), level="AAA")    # False
 
-apca_lc(Color("black"), Color("white"))        # -106.04 (dark on light → negative)
-apca_lc(Color("white"), Color("black"))        #  107.88 (light on dark → positive)
-apca_lc(Color("#888"), Color("white"))         #  -63.06
+apca_lc(Color("black"), Color("white"))        #  106.04 (dark on light → positive)
+apca_lc(Color("white"), Color("black"))        # -107.88 (light on dark → negative)
+apca_lc(Color("#888"), Color("white"))         #   63.06
 ```
 
 `find_accessible_pair` walks lightness in OKLCh until a target ratio is met:
@@ -482,7 +482,7 @@ best_text_color(Color("#3498db"))   # Color('#000000')
 best_text_color(Color("#222"))      # Color('#ffffff')
 ```
 
-WCAG ratios are symmetric, in `[1, 21]`. APCA Lc is signed: negative for dark text on light backgrounds, positive for light on dark; magnitude is what you compare against the published readability tables.
+WCAG ratios are symmetric, in `[1, 21]`. APCA Lc is signed (matching the APCA-W3 polarity convention): positive for dark text on light backgrounds, negative for light on dark. Magnitude is what you compare against the published readability tables (e.g. Lc 60 for body text).
 
 ---
 
@@ -762,7 +762,8 @@ Use `hexcraft <command> --help` for full options.
 |-----------------------------------------|----------------------------------------------------|
 | `Color(value)`                          | string / Color / `(r,g,b)` or `(r,g,b,a)` tuple    |
 | `Color.parse(s)`                        | same as `Color(s)`; raises `ColorParseError`       |
-| `Color.from_rgb(r, g, b, a=1)`          | accepts 0–1 floats or 0–255 ints                    |
+| `Color.from_rgb(r, g, b, a=1)`          | gamma-encoded sRGB, 0–1 floats (wide-gamut allowed) |
+| `Color.from_rgb8(r, g, b, a=1)`         | gamma-encoded sRGB, 0–255 integers                  |
 | `Color.from_hex(value)`                 |                                                    |
 | `Color.from_linear_rgb(r, g, b, a=1)`   |                                                    |
 | `Color.from_hsl(h, s, l, a=1)`          | h in degrees, s/l in `[0, 1]`                       |

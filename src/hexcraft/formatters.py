@@ -38,11 +38,11 @@ def format_css(c: Color, fmt: Literal["hex", "rgb", "hsl", "hwb", "lab", "lch", 
         return f"hwb({body} / {_fmt(a)})" if a < 1.0 else f"hwb({body})"
     if fmt == "lab":
         L, A, B = c.lab
-        body = f"{_fmt(L)}% {_fmt(A)} {_fmt(B)}"
+        body = f"{_fmt(L)} {_fmt(A)} {_fmt(B)}"
         return f"lab({body} / {_fmt(a)})" if a < 1.0 else f"lab({body})"
     if fmt == "lch":
         L, C, H = c.lch
-        body = f"{_fmt(L)}% {_fmt(C)} {_fmt(H)}"
+        body = f"{_fmt(L)} {_fmt(C)} {_fmt(H)}"
         return f"lch({body} / {_fmt(a)})" if a < 1.0 else f"lch({body})"
     if fmt == "oklab":
         L, A, B = c.oklab

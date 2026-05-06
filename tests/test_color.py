@@ -8,20 +8,34 @@ from hexcraft import Color
 
 
 def test_constructors_equivalent():
-    a = Color.from_rgb(255, 0, 0)
+    a = Color.from_rgb8(255, 0, 0)
     b = Color("#ff0000")
     c = Color("red")
     assert a == b == c
 
 
+def test_from_rgb_floats_strict():
+    """from_rgb expects 0-1 floats; values >1 represent wide-gamut, not 0-255 rescale."""
+    assert Color.from_rgb(1.0, 0.0, 0.0).hex == "#ff0000"
+    wide = Color.from_rgb(1.5, 0.5, 0.5)  # wide-gamut red, out of sRGB
+    assert wide.in_gamut() is False
+    assert wide.linear_rgb[0] > 1.0  # preserved, not silently rescaled
+
+
+def test_from_rgb8_ints():
+    assert Color.from_rgb8(255, 0, 0).hex == "#ff0000"
+    assert Color.from_rgb8(0, 0, 0).hex == "#000000"
+    assert Color.from_rgb8(255, 255, 255).hex == "#ffffff"
+
+
 def test_hex_property():
     assert Color("red").hex == "#ff0000"
-    assert Color.from_rgb(0, 0, 0).hex == "#000000"
-    assert Color.from_rgb(255, 255, 255).hex == "#ffffff"
+    assert Color.from_rgb(0.0, 0.0, 0.0).hex == "#000000"
+    assert Color.from_rgb(1.0, 1.0, 1.0).hex == "#ffffff"
 
 
 def test_hex_with_alpha():
-    c = Color.from_rgb(255, 0, 0, a=0.5)
+    c = Color.from_rgb8(255, 0, 0, a=0.5)
     assert c.hex.startswith("#ff0000")
     assert len(c.hex) == 9
 

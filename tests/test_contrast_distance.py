@@ -30,11 +30,11 @@ def test_fails_aa_close():
 
 
 def test_apca_signs():
-    """Black on white → strongly negative Lc; white on black → strongly positive."""
+    """APCA-W3 polarity: dark text on light bg → positive Lc; light on dark → negative."""
     light_on_dark = apca_lc(Color("white"), Color("black"))
     dark_on_light = apca_lc(Color("black"), Color("white"))
-    assert dark_on_light < -90.0
-    assert light_on_dark > 90.0
+    assert dark_on_light > 90.0
+    assert light_on_dark < -90.0
 
 
 def test_apca_zero_for_same():

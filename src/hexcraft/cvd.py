@@ -71,7 +71,7 @@ def simulate(c: Color, kind: CVDType, severity: float = 1.0) -> Color:
         raise ValueError(f"unknown CVD type: {kind!r}")
     m = _interp_identity(_MATRICES_FULL[kind], severity)
     r, g, b = _mul(m, c.linear_rgb)
-    return Color._from_linear(r, g, b, c.alpha)
+    return Color.from_linear_rgb(r, g, b, c.alpha)
 
 
 def daltonize(c: Color, kind: CVDType) -> Color:
@@ -88,4 +88,4 @@ def daltonize(c: Color, kind: CVDType) -> Color:
     eg = c._lg - sim._lg
     eb = c._lb - sim._lb
     sr, sg, sb = _mul(_DALTONIZE_SHIFT[kind], (er, eg, eb))
-    return Color._from_linear(c._lr + sr, c._lg + sg, c._lb + sb, c.alpha)
+    return Color.from_linear_rgb(c._lr + sr, c._lg + sg, c._lb + sb, c.alpha)

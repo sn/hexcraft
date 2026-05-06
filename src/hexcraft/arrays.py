@@ -19,51 +19,20 @@ except ImportError as e:
 
 from typing import Any
 
+from .spaces import oklab as _oklab_scalar
+from .spaces import xyz as _xyz_scalar
+
 NDArray = Any
 
 
-_M_RGB_TO_XYZ = np.array(
-    [
-        [0.4123907992659595, 0.3575843393838780, 0.1804807884018343],
-        [0.2126390058715104, 0.7151686787677559, 0.0721923153607337],
-        [0.0193308187155918, 0.1191947797946259, 0.9505321522496608],
-    ]
-)
-_M_XYZ_TO_RGB = np.array(
-    [
-        [3.2409699419045226, -1.5373831775700939, -0.4986107602930034],
-        [-0.9692436362808796, 1.8759675015077202, 0.0415550574071756],
-        [0.0556300796969936, -0.2039769588889765, 1.0569715142428784],
-    ]
-)
-_M1 = np.array(
-    [
-        [0.4122214708, 0.5363325363, 0.0514459929],
-        [0.2119034982, 0.6806995451, 0.1073969566],
-        [0.0883024619, 0.2817188376, 0.6299787005],
-    ]
-)
-_M2 = np.array(
-    [
-        [0.2104542553, 0.7936177850, -0.0040720468],
-        [1.9779984951, -2.4285922050, 0.4505937099],
-        [0.0259040371, 0.7827717662, -0.8086757660],
-    ]
-)
-_M2_INV = np.array(
-    [
-        [1.0, 0.3963377774, 0.2158037573],
-        [1.0, -0.1055613458, -0.0638541728],
-        [1.0, -0.0894841775, -1.2914855480],
-    ]
-)
-_M1_INV = np.array(
-    [
-        [4.0767416621, -3.3077115913, 0.2309699292],
-        [-1.2684380046, 2.6097574011, -0.3413193965],
-        [-0.0041960863, -0.7034186147, 1.7076147010],
-    ]
-)
+# Single source of truth: scalar matrices live in hexcraft.spaces; we wrap
+# them in numpy arrays here so a future correction stays in lock-step.
+_M_RGB_TO_XYZ = np.array(_xyz_scalar._M_RGB_TO_XYZ)
+_M_XYZ_TO_RGB = np.array(_xyz_scalar._M_XYZ_TO_RGB)
+_M1 = np.array(_oklab_scalar._M1)
+_M2 = np.array(_oklab_scalar._M2)
+_M2_INV = np.array(_oklab_scalar._M2_INV)
+_M1_INV = np.array(_oklab_scalar._M1_INV)
 
 
 def srgb_decode(rgb: NDArray) -> NDArray:

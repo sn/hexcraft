@@ -16,6 +16,7 @@ from collections.abc import Sequence
 
 from . import (
     Color,
+    ColorParseError,
     apca_lc,
     find_accessible_pair,
     material_tonal_palette,
@@ -174,7 +175,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     """CLI entry point. Returns the process exit code."""
     parser = build_parser()
     args = parser.parse_args(argv)
-    return args.func(args)
+    try:
+        return args.func(args)
+    except ColorParseError as e:
+        print(f"hexcraft: {e}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

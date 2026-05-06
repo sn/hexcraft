@@ -54,14 +54,14 @@ def map_to_gamut(c: Color, *, space: Literal["srgb"] = "srgb") -> Color:
     r = max(0.0, min(1.0, r))
     g = max(0.0, min(1.0, g))
     b = max(0.0, min(1.0, b))
-    return _C._from_linear(r, g, b, c.alpha)
+    return _C.from_linear_rgb(r, g, b, c.alpha)
 
 
 def clip(c: Color) -> Color:
     """Component-wise clip linear sRGB to [0, 1]."""
     from .color import Color as _C
     r, g, b = c.linear_rgb
-    return _C._from_linear(
+    return _C.from_linear_rgb(
         max(0.0, min(1.0, r)),
         max(0.0, min(1.0, g)),
         max(0.0, min(1.0, b)),
