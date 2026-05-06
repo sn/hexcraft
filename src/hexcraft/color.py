@@ -7,7 +7,7 @@ preserve wide-gamut and HDR colors; gamut mapping is applied at output time.
 from __future__ import annotations
 
 import math
-from typing import Literal, Self
+from typing import Literal
 
 from . import named, parsers
 from .spaces import cmyk as _cmyk
@@ -50,7 +50,7 @@ class Color:
         raise TypeError(f"cannot construct Color from {type(value).__name__}")
 
     @classmethod
-    def _from_linear(cls, r: float, g: float, b: float, a: float = 1.0) -> Self:
+    def _from_linear(cls, r: float, g: float, b: float, a: float = 1.0) -> Color:
         obj = cls.__new__(cls)
         obj._lr, obj._lg, obj._lb, obj._a = r, g, b, a
         return obj
@@ -58,7 +58,7 @@ class Color:
     # ── Constructors ──────────────────────────────────────────────────────
 
     @classmethod
-    def from_rgb(cls, r: float, g: float, b: float, a: float = 1.0) -> Self:
+    def from_rgb(cls, r: float, g: float, b: float, a: float = 1.0) -> Color:
         """Construct from gamma-encoded sRGB. Accepts 0–1 floats or 0–255 numbers."""
         if r > 1.0 or g > 1.0 or b > 1.0:
             r, g, b = r / 255.0, g / 255.0, b / 255.0
@@ -66,61 +66,61 @@ class Color:
         return cls._from_linear(lr, lg, lb, a)
 
     @classmethod
-    def from_hex(cls, value: str) -> Self:
+    def from_hex(cls, value: str) -> Color:
         """Construct from a hex string, with or without a leading ``#``."""
         return cls.parse(value if value.startswith("#") else f"#{value}")
 
     @classmethod
-    def from_linear_rgb(cls, r: float, g: float, b: float, a: float = 1.0) -> Self:
+    def from_linear_rgb(cls, r: float, g: float, b: float, a: float = 1.0) -> Color:
         """Construct directly from linear sRGB values (no gamma decoding)."""
         return cls._from_linear(r, g, b, a)
 
     @classmethod
-    def from_hsl(cls, h: float, s: float, l: float, a: float = 1.0) -> Self:
+    def from_hsl(cls, h: float, s: float, l: float, a: float = 1.0) -> Color:
         """Construct from HSL: hue in degrees, saturation and lightness in [0, 1]."""
         return cls.from_rgb(*hsl.hsl_to_srgb((h, s, l)), a=a)
 
     @classmethod
-    def from_hsv(cls, h: float, s: float, v: float, a: float = 1.0) -> Self:
+    def from_hsv(cls, h: float, s: float, v: float, a: float = 1.0) -> Color:
         """Construct from HSV: hue in degrees, saturation and value in [0, 1]."""
         return cls.from_rgb(*hsv.hsv_to_srgb((h, s, v)), a=a)
 
     @classmethod
-    def from_hwb(cls, h: float, w: float, b: float, a: float = 1.0) -> Self:
+    def from_hwb(cls, h: float, w: float, b: float, a: float = 1.0) -> Color:
         """Construct from HWB: hue in degrees, whiteness and blackness in [0, 1]."""
         return cls.from_rgb(*hwb.hwb_to_srgb((h, w, b)), a=a)
 
     @classmethod
-    def from_lab(cls, L: float, a_: float, b: float, alpha: float = 1.0) -> Self:
+    def from_lab(cls, L: float, a_: float, b: float, alpha: float = 1.0) -> Color:
         """Construct from CIE L*a*b*. L in [0, 100], a/b roughly in [-128, 128]."""
         x, y, z = lab.lab_to_xyz((L, a_, b))
         lr, lg, lb = xyz.xyz_to_linear_rgb((x, y, z))
         return cls._from_linear(lr, lg, lb, alpha)
 
     @classmethod
-    def from_lch(cls, L: float, c: float, h: float, a: float = 1.0) -> Self:
+    def from_lch(cls, L: float, c: float, h: float, a: float = 1.0) -> Color:
         """Construct from CIE LCh (polar Lab). L in [0, 100], h in degrees."""
         return cls.from_lab(*lab.lch_to_lab((L, c, h)), alpha=a)
 
     @classmethod
-    def from_oklab(cls, L: float, a_: float, b: float, alpha: float = 1.0) -> Self:
+    def from_oklab(cls, L: float, a_: float, b: float, alpha: float = 1.0) -> Color:
         """Construct from OKLab. L in [0, 1], a/b roughly in [-0.4, 0.4]."""
         lr, lg, lb = oklab.oklab_to_linear_rgb((L, a_, b))
         return cls._from_linear(lr, lg, lb, alpha)
 
     @classmethod
-    def from_oklch(cls, L: float, c: float, h: float, a: float = 1.0) -> Self:
+    def from_oklch(cls, L: float, c: float, h: float, a: float = 1.0) -> Color:
         """Construct from OKLCh (polar OKLab). L in [0, 1], c in [0, ~0.4], h in degrees."""
         return cls.from_oklab(*oklab.oklch_to_oklab((L, c, h)), alpha=a)
 
     @classmethod
-    def from_xyz(cls, x: float, y: float, z: float, a: float = 1.0) -> Self:
+    def from_xyz(cls, x: float, y: float, z: float, a: float = 1.0) -> Color:
         """Construct from CIE XYZ tristimulus values (D65 reference white)."""
         lr, lg, lb = xyz.xyz_to_linear_rgb((x, y, z))
         return cls._from_linear(lr, lg, lb, a)
 
     @classmethod
-    def from_p3(cls, r: float, g: float, b: float, a: float = 1.0, *, gamma: bool = True) -> Self:
+    def from_p3(cls, r: float, g: float, b: float, a: float = 1.0, *, gamma: bool = True) -> Color:
         """Construct from Display-P3. ``gamma=True`` treats inputs as gamma-encoded."""
         lin = _p3.p3_decode((r, g, b)) if gamma else (r, g, b)
         x, y, z = _p3.linear_p3_to_xyz(lin)
@@ -128,18 +128,18 @@ class Color:
         return cls._from_linear(lr, lg, lb, a)
 
     @classmethod
-    def from_cmyk(cls, c: float, m: float, y: float, k: float, a: float = 1.0) -> Self:
+    def from_cmyk(cls, c: float, m: float, y: float, k: float, a: float = 1.0) -> Color:
         """Naive CMYK → sRGB. Not color-accurate without an ICC profile."""
         return cls.from_rgb(*_cmyk.cmyk_to_srgb((c, m, y, k)), a=a)
 
     @classmethod
-    def from_kelvin(cls, temperature: float, a: float = 1.0) -> Self:
+    def from_kelvin(cls, temperature: float, a: float = 1.0) -> Color:
         """Approximate sRGB color of a blackbody at the given temperature in K."""
         from .temperature import kelvin_to_rgb
         return cls.from_rgb(*kelvin_to_rgb(temperature), a=a)
 
     @classmethod
-    def parse(cls, s: str) -> Self:
+    def parse(cls, s: str) -> Color:
         """Parse any CSS Color 4 string or named color. Equivalent to ``Color(s)``."""
         return cls(s)
 
@@ -273,51 +273,51 @@ class Color:
 
     # ── Manipulations (return new Color) ──────────────────────────────────
 
-    def with_alpha(self, alpha: float) -> Self:
+    def with_alpha(self, alpha: float) -> Color:
         """Return a new color with the alpha channel replaced."""
         return type(self)._from_linear(self._lr, self._lg, self._lb, alpha)
 
-    def lighten(self, amount: float) -> Self:
+    def lighten(self, amount: float) -> Color:
         """Increase OKLab lightness by ``amount`` (clamped to [0, 1])."""
         L, c, h = self.oklch
         return type(self).from_oklch(min(1.0, max(0.0, L + amount)), c, h, self._a)
 
-    def darken(self, amount: float) -> Self:
+    def darken(self, amount: float) -> Color:
         """Decrease OKLab lightness by ``amount``. Equivalent to ``lighten(-amount)``."""
         return self.lighten(-amount)
 
-    def saturate(self, amount: float) -> Self:
+    def saturate(self, amount: float) -> Color:
         """Add ``amount`` (scaled) to the OKLCh chroma, clamped at zero."""
         L, c, h = self.oklch
         new_c = max(0.0, c + amount * 0.4)
         return type(self).from_oklch(L, new_c, h, self._a)
 
-    def desaturate(self, amount: float) -> Self:
+    def desaturate(self, amount: float) -> Color:
         """Subtract ``amount`` from the OKLCh chroma. Equivalent to ``saturate(-amount)``."""
         return self.saturate(-amount)
 
-    def rotate(self, degrees: float) -> Self:
+    def rotate(self, degrees: float) -> Color:
         """Rotate hue in OKLCh by ``degrees``. Returns ``self`` when rotation is a multiple of 360°."""
         if degrees % 360.0 == 0.0:
             return self
         L, c, h = self.oklch
         return type(self).from_oklch(L, c, (h + degrees) % 360.0, self._a)
 
-    def grayscale(self) -> Self:
+    def grayscale(self) -> Color:
         """Collapse chroma to zero, preserving OKLab lightness."""
         L, _, _ = self.oklch
         return type(self).from_oklch(L, 0.0, 0.0, self._a)
 
-    def invert(self) -> Self:
+    def invert(self) -> Color:
         """Invert each linear sRGB component (``1 - c``)."""
         r, g, b = self.linear_rgb
         return type(self)._from_linear(1.0 - r, 1.0 - g, 1.0 - b, self._a)
 
-    def complement(self) -> Self:
+    def complement(self) -> Color:
         """Rotate hue by 180°."""
         return self.rotate(180.0)
 
-    def mix(self, other: Color, amount: float = 0.5, space: Space = "oklab") -> Self:
+    def mix(self, other: Color, amount: float = 0.5, space: Space = "oklab") -> Color:
         """Mix with ``other`` in ``space``. ``amount`` weights ``other`` (0 → self, 1 → other)."""
         from .manipulate import mix as _mix
         return _mix(self, other, amount, space=space)  # type: ignore[return-value]
@@ -334,19 +334,19 @@ class Color:
         from .distance import delta_e as _de
         return _de(self, other, method=method)
 
-    def to_gamut(self, space: Literal["srgb"] = "srgb") -> Self:
+    def to_gamut(self, space: Literal["srgb"] = "srgb") -> Color:
         """Reduce OKLCh chroma until the result fits the target gamut (CSS Color 4)."""
         from .gamut import map_to_gamut
         return map_to_gamut(self, space=space)  # type: ignore[return-value]
 
     # ── Palette methods (return list of Color) ────────────────────────────
 
-    def tints(self, count: int = 5) -> list[Self]:
+    def tints(self, count: int = 5) -> list[Color]:
         """``count`` colors stepping from this color toward white."""
         from .palettes import tints as _tints
         return _tints(self, count=count)  # type: ignore[return-value]
 
-    def shades(self, count: int = 5) -> list[Self]:
+    def shades(self, count: int = 5) -> list[Color]:
         """``count`` colors stepping from this color toward black."""
         from .palettes import shades as _shades
         return _shades(self, count=count)  # type: ignore[return-value]
@@ -354,67 +354,67 @@ class Color:
     lighter = tints
     darker = shades
 
-    def tones(self, count: int = 5) -> list[Self]:
+    def tones(self, count: int = 5) -> list[Color]:
         """``count`` colors stepping from this color toward equal-luminance gray."""
         from .palettes import tones as _tones
         return _tones(self, count=count)  # type: ignore[return-value]
 
-    def monochromatic(self, count: int = 5) -> list[Self]:
+    def monochromatic(self, count: int = 5) -> list[Color]:
         """``count`` colors evenly spaced in OKLab lightness, same hue and chroma."""
         from .palettes import monochromatic as _mono
         return _mono(self, count=count)  # type: ignore[return-value]
 
-    def analogous(self, count: int = 3, spread: float = 30.0) -> list[Self]:
+    def analogous(self, count: int = 3, spread: float = 30.0) -> list[Color]:
         """``count`` analogous colors centered on this one, spaced by ``spread`` degrees."""
         from .palettes import analogous as _ana
         return _ana(self, count=count, spread=spread)  # type: ignore[return-value]
 
-    def complementary(self) -> list[Self]:
+    def complementary(self) -> list[Color]:
         """Two colors: this one and its 180° complement."""
         from .palettes import complementary as _c
         return _c(self)  # type: ignore[return-value]
 
-    def triadic(self) -> list[Self]:
+    def triadic(self) -> list[Color]:
         """Three colors evenly spaced 120° apart in hue."""
         from .palettes import triadic as _t
         return _t(self)  # type: ignore[return-value]
 
-    def tetradic(self) -> list[Self]:
+    def tetradic(self) -> list[Color]:
         """Four colors evenly spaced 90° apart in hue."""
         from .palettes import tetradic as _t
         return _t(self)  # type: ignore[return-value]
 
-    def split_complementary(self, spread: float = 30.0) -> list[Self]:
+    def split_complementary(self, spread: float = 30.0) -> list[Color]:
         """Three colors: this one plus the two flanking the complement at ±``spread``°."""
         from .palettes import split_complementary as _sc
         return _sc(self, spread=spread)  # type: ignore[return-value]
 
     # ── CVD + accessibility ───────────────────────────────────────────────
 
-    def simulate(self, kind: Literal["protanopia", "deuteranopia", "tritanopia"], severity: float = 1.0) -> Self:
+    def simulate(self, kind: Literal["protanopia", "deuteranopia", "tritanopia"], severity: float = 1.0) -> Color:
         """Simulate how this color appears to a viewer with the given CVD."""
         from .cvd import simulate as _sim
         return _sim(self, kind, severity)  # type: ignore[return-value]
 
-    def daltonize(self, kind: Literal["protanopia", "deuteranopia", "tritanopia"]) -> Self:
+    def daltonize(self, kind: Literal["protanopia", "deuteranopia", "tritanopia"]) -> Color:
         """Adjust this color so a CVD viewer can distinguish it more easily."""
         from .cvd import daltonize as _dal
         return _dal(self, kind)  # type: ignore[return-value]
 
     def accessible_against(self, other: Color, *, ratio: float = 4.5,
-                           direction: Literal["lighten", "darken", "auto"] = "auto") -> Self | None:
+                           direction: Literal["lighten", "darken", "auto"] = "auto") -> Color | None:
         """Return a nearby color meeting WCAG ``ratio`` against ``other``, or None."""
         from .accessibility import find_accessible_pair
         return find_accessible_pair(self, other, ratio=ratio, direction=direction)  # type: ignore[return-value]
 
     # ── Tonal palettes ────────────────────────────────────────────────────
 
-    def material_palette(self) -> dict[int, Self]:
+    def material_palette(self) -> dict[int, Color]:
         """Material You-style 13-stop tonal palette (keys: 0–100)."""
         from .tonal import material_tonal_palette
         return material_tonal_palette(self)  # type: ignore[return-value]
 
-    def tailwind(self) -> dict[int, Self]:
+    def tailwind(self) -> dict[int, Color]:
         """Tailwind-style 50–950 scale (11 stops)."""
         from .tonal import tailwind_scale
         return tailwind_scale(self)  # type: ignore[return-value]
