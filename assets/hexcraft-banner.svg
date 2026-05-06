@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 32" preserveAspectRatio="none" role="img" aria-label="hexcraft color library banner">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 10" preserveAspectRatio="none" role="img" aria-label="hexcraft color library banner">
   <title>hexcraft - perceptually uniform OKLCh hue spectrum</title>
   <defs>
     <linearGradient id="hex" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -66,5 +66,5 @@
       <stop offset="100.0000%" stop-color="#e7729b"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="32" rx="4" ry="4" fill="url(#hex)"/>
+  <rect width="1200" height="10" rx="2" ry="2" fill="url(#hex)"/>
 </svg>

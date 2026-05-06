@@ -1,7 +1,7 @@
 # hexcraft
 
 <p align="center">
-  <img src="https://github.com/sn/hexcraft/blob/main/assets/hexcraft-banner.svg" alt="hexcraft - perceptually uniform OKLCh hue spectrum" width="100%">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/hexcraft-banner.svg" alt="hexcraft - perceptually uniform OKLCh hue spectrum" width="100%">
 </p>
 
 The complete color library for Python. Parse, convert, manipulate, mix, measure, and visualize color across 11 color spaces - with zero required dependencies and a single fluent `Color` API.
