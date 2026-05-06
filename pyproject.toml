@@ -1,0 +1,68 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hexcraft"
+version = "0.5.0"
+description = "The complete color library for Python: parsing, conversion, manipulation, contrast, palettes, and color science across 10+ color spaces."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Sean Nieuwoudt", email = "sean@isean.co.za" }]
+keywords = ["color", "colour", "rgb", "hsl", "oklch", "lab", "wcag", "apca", "palette", "gamut"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+numpy = ["numpy>=1.24"]
+science = ["colour-science>=0.4.4", "numpy>=1.24"]
+dev = ["pytest>=7", "pytest-cov", "ruff", "flake8", "mypy"]
+
+[project.scripts]
+hexcraft = "hexcraft.cli:main"
+
+[project.urls]
+Homepage = "https://sswn.dev"
+Repository = "https://github.com/sn/hexcraft"
+Documentation = "https://github.com/sn/hexcraft#readme"
+Issues = "https://github.com/sn/hexcraft/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hexcraft"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "SIM"]
+# E501  long lines — color-science constants are clearer on one line
+# E741  ambiguous names (l, I) — l is the standard CMC weight; one-letter math vars
+# N803  uppercase argument — Lab/OKLCh use L, A, B, C
+# N806  uppercase variable — same; M1/M2 matrices, Sl/Sc/Sh CMC weights, kL/kC/kH
+# N814  camelcase imports — matrix constants follow paper conventions
+ignore = ["E501", "E741", "N803", "N806", "N814"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E741", "N806"]
+
+[tool.mypy]
+strict = true
+python_version = "3.10"
