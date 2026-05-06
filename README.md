@@ -15,11 +15,11 @@ The complete color library for Python. Parse, convert, manipulate, mix, measure,
 from hexcraft import Color
 
 c = Color("oklch(0.7 0.15 250)")
-c.hex                        # '#5e91d8'
-c.contrast(Color("white"))   # 2.83
-c.lighter(5)                 # [Color, Color, Color, Color, Color]
-c.material_palette()         # {0..100: Color}  Material You tonal scale
-c.simulate("deuteranopia")   # color as seen by red-green color-blind viewers
+c.hex                       # '#5e91d8'
+c.contrast(Color("white"))  # 2.83
+c.lighter(5)                # [Color, Color, Color, Color, Color]
+c.material_palette()        # {0..100: Color}  Material You tonal scale
+c.simulate("deuteranopia")  # color as seen by red-green color-blind viewers
 ```
 
 ---
@@ -60,10 +60,10 @@ c.simulate("deuteranopia")   # color as seen by red-green color-blind viewers
 ## Installation
 
 ```bash
-pip install hexcraft               # core, zero dependencies
-pip install 'hexcraft[numpy]'      # vectorized array ops + image utilities
-pip install 'hexcraft[science]'    # full color-science integration (reserved)
-pip install 'hexcraft[dev]'        # tests, ruff, mypy
+pip install hexcraft             # core, zero dependencies
+pip install 'hexcraft[numpy]'    # vectorized array ops + image utilities
+pip install 'hexcraft[science]'  # full color-science integration (reserved)
+pip install 'hexcraft[dev]'      # tests, ruff, mypy
 ```
 
 Requires Python 3.10 or newer.
@@ -79,11 +79,11 @@ from hexcraft import Color
 c = Color("oklch(0.7 0.15 250)")
 
 # Read in any space
-c.hex                # '#5e91d8'
-c.rgb                # (94, 145, 216)
-c.hsl                # (213.16, 0.59, 0.61)
-c.lab                # (58.5, -3.5, -38.7)
-c.oklch              # (0.7, 0.15, 250.0)
+c.hex    # '#5e91d8'
+c.rgb    # (94, 145, 216)
+c.hsl    # (213.16, 0.59, 0.61)
+c.lab    # (58.5, -3.5, -38.7)
+c.oklch  # (0.7, 0.15, 250.0)
 
 # Manipulate (immutable - every method returns a new Color)
 c.lighten(0.1)
@@ -91,22 +91,22 @@ c.rotate(60)
 c.with_alpha(0.5)
 
 # Mix in any space
-c.mix(Color("red"))                       # OKLab by default
-c.mix(Color("red"), 0.3, space="oklch")   # shortest-hue interpolation
+c.mix(Color("red"))                      # OKLab by default
+c.mix(Color("red"), 0.3, space="oklch")  # shortest-hue interpolation
 
 # Accessibility
-c.contrast(Color("white"))                # WCAG ratio
-c.accessible_against(Color("white"))      # auto-shift to meet 4.5:1
+c.contrast(Color("white"))            # WCAG ratio
+c.accessible_against(Color("white"))  # auto-shift to meet 4.5:1
 
 # Generate palettes
-c.tints(5)                                # 5 steps to white
-c.material_palette()                      # 13-stop Material You scale
-c.tailwind()                              # 11-stop Tailwind 50–950
-c.triadic()                               # 3 colors 120° apart
+c.tints(5)            # 5 steps to white
+c.material_palette()  # 13-stop Material You scale
+c.tailwind()          # 11-stop Tailwind 50–950
+c.triadic()           # 3 colors 120° apart
 
 # CSS output
-c.css("hex")                              # '#5e91d8'
-c.css("oklch")                            # 'oklch(0.7 0.15 250)'
+c.css("hex")    # '#5e91d8'
+c.css("oklch")  # 'oklch(0.7 0.15 250)'
 ```
 
 ---
@@ -149,12 +149,12 @@ viewing-tips section.
 
 ```python
 Color("#ff0000")
-Color("#f00")                              # 3-digit
-Color("#f008")                             # 4-digit (with alpha)
-Color("#ff000080")                         # 8-digit (with alpha)
+Color("#f00")       # 3-digit
+Color("#f008")      # 4-digit (with alpha)
+Color("#ff000080")  # 8-digit (with alpha)
 
 Color("rgb(255, 0, 0)")
-Color("rgb(255 0 0)")                      # space-separated CSS Color 4
+Color("rgb(255 0 0)")  # space-separated CSS Color 4
 Color("rgb(100%, 0%, 0%)")
 Color("rgba(255, 0, 0, 0.5)")
 Color("rgb(255 0 0 / 50%)")
@@ -175,10 +175,10 @@ Color("color(srgb-linear 1 0 0)")
 Color("color(display-p3 1 0 0)")
 Color("color(xyz 0.412 0.213 0.019)")
 
-Color("rebeccapurple")                     # any of 148 CSS named colors
-Color("transparent")                       # also valid; alpha = 0
+Color("rebeccapurple")  # any of 148 CSS named colors
+Color("transparent")    # also valid; alpha = 0
 
-Color(other_color)                         # copy
+Color(other_color)  # copy
 ```
 
 Hue accepts `deg` (default), `rad`, `turn`, or `grad` units. `none` is treated as `0`. Errors raise `hexcraft.ColorParseError`.
@@ -189,10 +189,10 @@ from hexcraft import parse, ColorParseError
 try:
     c = Color("not-a-color")
 except ColorParseError as e:
-    print(e)                               # could not parse color: 'not-a-color'
+    print(e)  # could not parse color: 'not-a-color'
 
 # Direct parser if you need the intermediate representation:
-parse("oklch(0.7 0.15 250)")              # Parsed(space='oklch', components=(0.7, 0.15, 250.0), alpha=1.0)
+parse("oklch(0.7 0.15 250)")  # Parsed(space='oklch', components=(0.7, 0.15, 250.0), alpha=1.0)
 ```
 
 ---
@@ -226,27 +226,27 @@ parse("oklch(0.7 0.15 250)")              # Parsed(space='oklch', components=(0.
 ```python
 c = Color("#3498db")
 
-c.alpha                    # 1.0
-c.rgb                      # (52, 152, 219)
-c.rgba                     # (52, 152, 219, 1.0)
-c.srgb                     # (0.204, 0.596, 0.859)  - gamma-encoded, clamped
-c.srgb_unclamped           # same but allows out-of-gamut
-c.linear_rgb               # (0.034, 0.318, 0.708)
-c.hsl                      # (204.1, 0.70, 0.53)
-c.hsv                      # (204.1, 0.76, 0.86)
-c.hwb                      # (204.1, 0.20, 0.14)
-c.xyz                      # (0.222, 0.247, 0.700)
-c.lab                      # (56.9, -2.4, -39.0)
-c.lch                      # (56.9, 39.0, 266.5)
-c.oklab                    # (0.65, -0.06, -0.12)
-c.oklch                    # (0.65, 0.13, 242.7)
-c.p3                       # (0.252, 0.589, 0.851)
-c.cmyk                     # (0.76, 0.31, 0.0, 0.14)
-c.kelvin                   # ~10500 (or None for non-blackbody chromaticities)
+c.alpha           # 1.0
+c.rgb             # (52, 152, 219)
+c.rgba            # (52, 152, 219, 1.0)
+c.srgb            # (0.204, 0.596, 0.859)  - gamma-encoded, clamped
+c.srgb_unclamped  # same but allows out-of-gamut
+c.linear_rgb      # (0.034, 0.318, 0.708)
+c.hsl             # (204.1, 0.70, 0.53)
+c.hsv             # (204.1, 0.76, 0.86)
+c.hwb             # (204.1, 0.20, 0.14)
+c.xyz             # (0.222, 0.247, 0.700)
+c.lab             # (56.9, -2.4, -39.0)
+c.lch             # (56.9, 39.0, 266.5)
+c.oklab           # (0.65, -0.06, -0.12)
+c.oklch           # (0.65, 0.13, 242.7)
+c.p3              # (0.252, 0.589, 0.851)
+c.cmyk            # (0.76, 0.31, 0.0, 0.14)
+c.kelvin          # ~10500 (or None for non-blackbody chromaticities)
 
-c.luminance                # 0.281 - WCAG relative luminance
-c.name                     # 'dodgerblue' - closest CSS named color
-c.in_gamut()               # True/False - within sRGB
+c.luminance   # 0.281 - WCAG relative luminance
+c.name        # 'dodgerblue' - closest CSS named color
+c.in_gamut()  # True/False - within sRGB
 ```
 
 `linear_rgb` and `srgb_unclamped` may contain values outside `[0, 1]` to faithfully represent wide-gamut and HDR colors. Use `c.to_gamut()` to fold back into sRGB.
@@ -260,14 +260,14 @@ Every method is immutable and returns a new `Color`. Operations work in OKLCh by
 ```python
 c = Color("#3498db")
 
-c.lighten(0.1)             # +0.1 in OKLab L
+c.lighten(0.1)   # +0.1 in OKLab L
 c.darken(0.1)
-c.saturate(0.2)            # +chroma in OKLCh
+c.saturate(0.2)  # +chroma in OKLCh
 c.desaturate(0.2)
-c.rotate(60)               # rotate hue by 60°
-c.complement()             # rotate(180)
-c.grayscale()              # collapse chroma to 0
-c.invert()                 # 1 - rgb in linear sRGB
+c.rotate(60)     # rotate hue by 60°
+c.complement()   # rotate(180)
+c.grayscale()    # collapse chroma to 0
+c.invert()       # 1 - rgb in linear sRGB
 c.with_alpha(0.5)
 ```
 
@@ -275,7 +275,7 @@ Equality and hashing use linear-sRGB tolerance (≈ 1e-6) and are well-behaved a
 
 ```python
 Color("red") == Color("#ff0000") == Color("rgb(255, 0, 0)")  # True
-{Color("red"), Color("#ff0000")}                              # set of size 1
+{Color("red"), Color("#ff0000")}                             # set of size 1
 ```
 
 ---
@@ -289,10 +289,10 @@ Color("red") == Color("#ff0000") == Color("rgb(255, 0, 0)")  # True
 ```python
 from hexcraft import Color, mix, blend
 
-mix(Color("red"), Color("blue"))                       # OKLab midpoint
-mix(Color("red"), Color("blue"), 0.3)                  # 30% toward blue
-mix(Color("red"), Color("blue"), 0.5, space="oklch")   # different perceptual path
-mix(Color("red"), Color("blue"), 0.5, space="srgb")    # naive sRGB lerp
+mix(Color("red"), Color("blue"))                      # OKLab midpoint
+mix(Color("red"), Color("blue"), 0.3)                 # 30% toward blue
+mix(Color("red"), Color("blue"), 0.5, space="oklch")  # different perceptual path
+mix(Color("red"), Color("blue"), 0.5, space="srgb")   # naive sRGB lerp
 
 # Method form (always defaults to OKLab):
 Color("red").mix(Color("blue"), 0.5)
@@ -303,7 +303,7 @@ Color("red").mix(Color("blue"), 0.5)
 ```python
 fg = Color("blue").with_alpha(0.5)
 bg = Color("red")
-blend(bg, fg)              # red showing through 50% blue
+blend(bg, fg)  # red showing through 50% blue
 ```
 
 ---
@@ -322,21 +322,21 @@ from hexcraft import (
 
 c = Color("#3498db")
 
-complementary(c)                 # [c, c.rotate(180)]
-triadic(c)                       # 3 colors 120° apart
-tetradic(c)                      # 4 colors 90° apart
-split_complementary(c)           # base + 2 colors flanking the complement
+complementary(c)        # [c, c.rotate(180)]
+triadic(c)              # 3 colors 120° apart
+tetradic(c)             # 4 colors 90° apart
+split_complementary(c)  # base + 2 colors flanking the complement
 analogous(c, count=5, spread=20) # N colors spaced by 20° hue
 
-shades(c, count=5)               # toward black
-tints(c, count=5)                # toward white
-tones(c, count=5)                # toward equal-lightness gray
-monochromatic(c, count=7)        # full lightness ramp at fixed hue/chroma
+shades(c, count=5)         # toward black
+tints(c, count=5)          # toward white
+tones(c, count=5)          # toward equal-lightness gray
+monochromatic(c, count=7)  # full lightness ramp at fixed hue/chroma
 
 # Method-style (return type-stable lists):
 c.tints(10)
-c.lighter(10)                    # alias for .tints()
-c.darker(10)                     # alias for .shades()
+c.lighter(10)  # alias for .tints()
+c.darker(10)   # alias for .shades()
 c.triadic()
 c.analogous(count=5)
 ```
@@ -378,10 +378,10 @@ from hexcraft import (
     MATERIAL_TONES, TAILWIND_STOPS,
 )
 
-material_tonal_palette(c)        # equivalent to c.material_palette()
-tailwind_scale(c)                # equivalent to c.tailwind()
-MATERIAL_TONES                   # (0, 10, 20, ..., 100)
-TAILWIND_STOPS                   # (50, 100, 200, ..., 950)
+material_tonal_palette(c)  # equivalent to c.material_palette()
+tailwind_scale(c)          # equivalent to c.tailwind()
+MATERIAL_TONES             # (0, 10, 20, ..., 100)
+TAILWIND_STOPS             # (50, 100, 200, ..., 950)
 ```
 
 ---
@@ -411,20 +411,20 @@ Each map is callable and exposes a `.colors(n)` discrete sampler:
 ```python
 from hexcraft import viridis, magma, rdbu, tab10, colormap
 
-viridis(0.5)                     # Color at midpoint
-viridis.colors(8)                # 8 evenly spaced Colors
+viridis(0.5)       # Color at midpoint
+viridis.colors(8)  # 8 evenly spaced Colors
 
-magma(0.0).hex                   # '#000004' (deep black)
-magma(1.0).hex                   # '#fcfdbf' (cream)
+magma(0.0).hex  # '#000004' (deep black)
+magma(1.0).hex  # '#fcfdbf' (cream)
 
-rdbu(0.0)                        # red end
-rdbu(0.5)                        # neutral midpoint
-rdbu(1.0)                        # blue end
+rdbu(0.0)  # red end
+rdbu(0.5)  # neutral midpoint
+rdbu(1.0)  # blue end
 
-tab10.colors()                   # all 10 categorical colors
-tab10.colors(15)                 # extends with interpolation if you ask for more
+tab10.colors()    # all 10 categorical colors
+tab10.colors(15)  # extends with interpolation if you ask for more
 
-colormap("viridis")(0.5)         # lookup by string
+colormap("viridis")(0.5)  # lookup by string
 ```
 
 Maps are also grouped:
@@ -432,7 +432,7 @@ Maps are also grouped:
 ```python
 from hexcraft import SEQUENTIAL_MAPS, DIVERGING_MAPS, QUALITATIVE_MAPS, ALL_MAPS
 
-list(SEQUENTIAL_MAPS)            # ['viridis', 'magma', ..., 'turbo']
+list(SEQUENTIAL_MAPS)  # ['viridis', 'magma', ..., 'turbo']
 ALL_MAPS["RdBu"](0.7)
 ```
 
@@ -448,16 +448,16 @@ from hexcraft import (
     find_accessible_pair, best_text_color,
 )
 
-wcag_ratio(Color("white"), Color("black"))     # 21.0
-wcag_ratio(Color("#777"), Color("#fff"))       # 4.48
+wcag_ratio(Color("white"), Color("black"))  # 21.0
+wcag_ratio(Color("#777"), Color("#fff"))    # 4.48
 
-passes_wcag(Color("#777"), Color("#fff"))                 # False (AA, normal text)
-passes_wcag(Color("#777"), Color("#fff"), large=True)     # True (AA, large text)
-passes_wcag(Color("#777"), Color("#fff"), level="AAA")    # False
+passes_wcag(Color("#777"), Color("#fff"))               # False (AA, normal text)
+passes_wcag(Color("#777"), Color("#fff"), large=True)   # True (AA, large text)
+passes_wcag(Color("#777"), Color("#fff"), level="AAA")  # False
 
-apca_lc(Color("black"), Color("white"))        #  106.04 (dark on light → positive)
-apca_lc(Color("white"), Color("black"))        # -107.88 (light on dark → negative)
-apca_lc(Color("#888"), Color("white"))         #   63.06
+apca_lc(Color("black"), Color("white"))  #  106.04 (dark on light → positive)
+apca_lc(Color("white"), Color("black"))  # -107.88 (light on dark → negative)
+apca_lc(Color("#888"), Color("white"))   #   63.06
 ```
 
 `find_accessible_pair` walks lightness in OKLCh until a target ratio is met:
@@ -478,8 +478,8 @@ find_accessible_pair(fg, bg, ratio=7.0, direction="darken")
 For a quick "black or white?" decision:
 
 ```python
-best_text_color(Color("#3498db"))   # Color('#000000')
-best_text_color(Color("#222"))      # Color('#ffffff')
+best_text_color(Color("#3498db"))  # Color('#000000')
+best_text_color(Color("#222"))     # Color('#ffffff')
 ```
 
 WCAG ratios are symmetric, in `[1, 21]`. APCA Lc is signed (matching the APCA-W3 polarity convention): positive for dark text on light backgrounds, negative for light on dark. Magnitude is what you compare against the published readability tables (e.g. Lc 60 for body text).
@@ -491,11 +491,11 @@ WCAG ratios are symmetric, in `[1, 21]`. APCA Lc is signed (matching the APCA-W3
 ```python
 from hexcraft import delta_e
 
-delta_e(a, b, method="76")     # CIE76 - Euclidean in Lab, fastest
-delta_e(a, b, method="94")     # CIE94 - graphic-arts weighting
-delta_e(a, b, method="2000")   # CIEDE2000 - current CIE recommendation (default)
-delta_e(a, b, method="cmc")    # CMC(l:c) with l=2 c=1, textile standard
-delta_e(a, b, method="ok")     # Euclidean in OKLab, modern alternative
+delta_e(a, b, method="76")    # CIE76 - Euclidean in Lab, fastest
+delta_e(a, b, method="94")    # CIE94 - graphic-arts weighting
+delta_e(a, b, method="2000")  # CIEDE2000 - current CIE recommendation (default)
+delta_e(a, b, method="cmc")   # CMC(l:c) with l=2 c=1, textile standard
+delta_e(a, b, method="ok")    # Euclidean in OKLab, modern alternative
 
 # Method form
 Color("red").delta_e(Color("orangered"))
@@ -511,10 +511,10 @@ When a color exceeds sRGB (e.g., `oklch(0.7 0.4 30)` is more saturated than sRGB
 
 ```python
 wide = Color.from_oklch(0.7, 0.4, 30)
-wide.in_gamut()                  # False
+wide.in_gamut()    # False
 mapped = wide.to_gamut()
-mapped.in_gamut()                # True
-mapped.hex                       # '#ff6551'
+mapped.in_gamut()  # True
+mapped.hex         # '#ff6551'
 
 # Cheaper alternative: per-channel clip in linear sRGB
 from hexcraft import clip
@@ -532,12 +532,12 @@ from hexcraft import Color, simulate, daltonize
 
 red = Color("red")
 
-simulate(red, "protanopia")          # red as protans (red-blind) see it
-simulate(red, "deuteranopia")        # red as deutans (green-blind) see it
-simulate(red, "tritanopia")          # red as tritans (blue-blind) see it
-simulate(red, "deuteranopia", severity=0.5)   # interpolate to anomalous trichromacy
+simulate(red, "protanopia")                  # red as protans (red-blind) see it
+simulate(red, "deuteranopia")                # red as deutans (green-blind) see it
+simulate(red, "tritanopia")                  # red as tritans (blue-blind) see it
+simulate(red, "deuteranopia", severity=0.5)  # interpolate to anomalous trichromacy
 
-daltonize(red, "deuteranopia")       # adjust the color so deutans can distinguish it
+daltonize(red, "deuteranopia")  # adjust the color so deutans can distinguish it
 
 # Method forms
 red.simulate("deuteranopia")
@@ -548,9 +548,9 @@ Simulation uses Machado/Oliveira/Fernandes (2009) physiologically-based matrices
 
 ```python
 # Concrete example: red and green look similar to deutans → daltonize for a UI
-button_a = Color("#10b981")          # success green
-button_b = Color("#ef4444")          # error red
-button_a.daltonize("deuteranopia")   # shifted green so it remains distinguishable
+button_a = Color("#10b981")         # success green
+button_b = Color("#ef4444")         # error red
+button_a.daltonize("deuteranopia")  # shifted green so it remains distinguishable
 button_b.daltonize("deuteranopia")
 ```
 
@@ -563,13 +563,13 @@ button_b.daltonize("deuteranopia")
 ```python
 from hexcraft import Color
 
-Color.from_kelvin(2700).hex      # '#ffa757'  warm tungsten
-Color.from_kelvin(5500).hex      # '#ffedde'  daylight
-Color.from_kelvin(6500).hex      # '#fffefa'  D65 (sRGB white point)
-Color.from_kelvin(9000).hex      # '#d2dfff'  cool blue
+Color.from_kelvin(2700).hex  # '#ffa757'  warm tungsten
+Color.from_kelvin(5500).hex  # '#ffedde'  daylight
+Color.from_kelvin(6500).hex  # '#fffefa'  D65 (sRGB white point)
+Color.from_kelvin(9000).hex  # '#d2dfff'  cool blue
 
 c = Color("#fffefa")
-c.kelvin                         # ~6300 K (returns None outside ~2000–25000 K)
+c.kelvin  # ~6300 K (returns None outside ~2000–25000 K)
 ```
 
 Forward direction uses Tanner Helland's piecewise approximation. Inverse (CCT from a color) uses McCamy's cubic in CIE xy chromaticity. Both are visualization-grade, not photometric.
@@ -608,11 +608,11 @@ The default metric is `"2000"` (CIEDE2000). Use `"ok"` for fast batch matching a
 
 ```python
 red_p3 = Color("color(display-p3 1 0 0)")
-red_p3.hex                       # '#ff0000' (out-of-gamut clipped to sRGB red)
-red_p3.p3                        # (1.0, 0.0, 0.0) - round-trips through P3
+red_p3.hex  # '#ff0000' (out-of-gamut clipped to sRGB red)
+red_p3.p3   # (1.0, 0.0, 0.0) - round-trips through P3
 
 c = Color("#3498db")
-c.p3                             # gamma-encoded P3 in [0, 1]
+c.p3  # gamma-encoded P3 in [0, 1]
 Color.from_p3(0.252, 0.589, 0.851)
 ```
 
@@ -620,9 +620,9 @@ For converting XYZ between white points (e.g., D65 ↔ D50 for ICC v4 work):
 
 ```python
 from hexcraft import adapt, D50, D65
-from hexcraft import D55, D75, A      # also available
+from hexcraft import D55, D75, A  # also available
 
-adapt((0.5, 0.6, 0.7), D65, D50)              # Bradford (default)
+adapt((0.5, 0.6, 0.7), D65, D50)                # Bradford (default)
 adapt((0.5, 0.6, 0.7), D65, D50, method="cat16")
 adapt((0.5, 0.6, 0.7), D65, D50, method="xyz")  # simplest, von Kries XYZ scaling
 ```
@@ -632,7 +632,7 @@ adapt((0.5, 0.6, 0.7), D65, D50, method="xyz")  # simplest, von Kries XYZ scalin
 ## CMYK
 
 ```python
-Color("red").cmyk                # (0.0, 1.0, 1.0, 0.0)
+Color("red").cmyk  # (0.0, 1.0, 1.0, 0.0)
 Color.from_cmyk(0.5, 0.2, 0.0, 0.1)
 ```
 
@@ -656,9 +656,9 @@ from hexcraft.arrays import (
     relative_luminance, wcag_ratio, delta_e_ok,
 )
 
-img = np.random.rand(1024, 1024, 3)         # gamma sRGB image
-ok = srgb_to_oklab(img)                     # (H, W, 3) in OKLab
-luma = relative_luminance(img)              # (H, W) WCAG relative luminance
+img = np.random.rand(1024, 1024, 3)            # gamma sRGB image
+ok = srgb_to_oklab(img)                        # (H, W, 3) in OKLab
+luma = relative_luminance(img)                 # (H, W) WCAG relative luminance
 ratios = wcag_ratio(img, np.array([1, 1, 1]))  # contrast against white
 diffs = delta_e_ok(img, np.array([1, 0, 0]))   # per-pixel OKLab ΔE vs red
 ```
@@ -669,7 +669,7 @@ diffs = delta_e_ok(img, np.array([1, 0, 0]))   # per-pixel OKLab ΔE vs red
 import numpy as np
 from hexcraft.image import dominant_colors, average_color
 
-img = np.array(...).astype(np.uint8)         # or float in [0, 1]; (H, W, 3) or (H, W, 4)
+img = np.array(...).astype(np.uint8)  # or float in [0, 1]; (H, W, 3) or (H, W, 4)
 
 # k-means clustering in OKLab space (perceptually meaningful)
 top5 = dominant_colors(img, n=5)
