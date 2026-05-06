@@ -1,7 +1,7 @@
 """Perceptual colormaps for data visualization.
 
 Sequential maps (viridis/magma/plasma/inferno/cividis/turbo) are perceptually
-uniform — equal steps in the colormap correspond to equal perceptual changes,
+uniform - equal steps in the colormap correspond to equal perceptual changes,
 which preserves data structure when reproduced in greyscale or to color-blind
 viewers. Diverging maps (RdBu, BrBG, Spectral) emphasize a center value;
 qualitative maps (tab10, set1) provide categorical distinguishability.
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from .color import Color
 
 
-# Sequential maps — purple/blue → yellow/cream, perceptually uniform.
+# Sequential maps - purple/blue → yellow/cream, perceptually uniform.
 _VIRIDIS = (
     "#440154", "#482577", "#3f4788", "#33638d", "#2a788e", "#21908c",
     "#22a884", "#44bf70", "#7ad151", "#bddf26", "#fde725",
@@ -46,7 +46,7 @@ _TURBO = (
     "#61fc6c", "#a4fc3b", "#d1e834", "#f3c63a", "#fb8022",
 )
 
-# Diverging — anchored on a neutral midpoint.
+# Diverging - anchored on a neutral midpoint.
 _RDBU = (
     "#67001f", "#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7",
     "#d1e5f0", "#92c5de", "#4393c3", "#2166ac", "#053061",
@@ -60,7 +60,7 @@ _SPECTRAL = (
     "#e6f598", "#abdda4", "#66c2a5", "#3288bd", "#5e4fa2",
 )
 
-# Qualitative — categorical distinguishability.
+# Qualitative - categorical distinguishability.
 _TAB10 = (
     "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
     "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",

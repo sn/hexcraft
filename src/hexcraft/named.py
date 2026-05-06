@@ -1,4 +1,4 @@
-"""CSS named colors (CSS Color Module Level 4 — 148 names including aliases)."""
+"""CSS named colors (CSS Color Module Level 4 - 148 names including aliases)."""
 
 from __future__ import annotations
 

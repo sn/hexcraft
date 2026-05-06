@@ -2,9 +2,9 @@
 
 Numpy is required. Two algorithms are offered:
 
-- ``"kmeans"`` — Lloyd's algorithm in OKLab (perceptually meaningful clusters).
+- ``"kmeans"`` - Lloyd's algorithm in OKLab (perceptually meaningful clusters).
   k-means++ seeding for stability. Default.
-- ``"median_cut"`` — Heckbert's classic algorithm in linear sRGB. Faster, more
+- ``"median_cut"`` - Heckbert's classic algorithm in linear sRGB. Faster, more
   deterministic, slightly less perceptual.
 
 Both accept a numpy array of shape (H, W, 3) or (N, 3) with sRGB values in

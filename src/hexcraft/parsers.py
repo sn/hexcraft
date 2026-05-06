@@ -8,11 +8,11 @@ Supported syntax:
 - rgb(r, g, b) / rgb(r g b / a) / rgba(...)
 - hsl(h, s%, l%) / hsl(h s% l% / a) / hsla(...)
 - hwb(h w% b% / a)
-- lab(L a b / a)        — L in % or [0..100], a/b numeric or %
-- lch(L c h / a)        — L in % or [0..100], c numeric or %, h deg
-- oklab(L a b / a)      — L in % or [0..1], a/b numeric or % (-0.4..0.4)
-- oklch(L c h / a)      — L in % or [0..1], c numeric or % (0..0.4), h deg
-- color(srgb r g b / a) — also srgb-linear, display-p3, rec2020 (limited)
+- lab(L a b / a)        - L in % or [0..100], a/b numeric or %
+- lch(L c h / a)        - L in % or [0..100], c numeric or %, h deg
+- oklab(L a b / a)      - L in % or [0..1], a/b numeric or % (-0.4..0.4)
+- oklch(L c h / a)      - L in % or [0..1], c numeric or % (0..0.4), h deg
+- color(srgb r g b / a) - also srgb-linear, display-p3, rec2020 (limited)
 - CSS named colors
 """
 

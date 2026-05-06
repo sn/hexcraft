@@ -1,7 +1,7 @@
 """Color temperature: Kelvin (CCT) ↔ Color.
 
 Forward direction uses Tanner Helland's piecewise approximation, accurate to a
-few percent in [1000, 40000] K — fine for visualization, dimming, and warm/
+few percent in [1000, 40000] K - fine for visualization, dimming, and warm/
 cool simulation. Use ICC-aware tools for color-critical photography.
 
 Inverse direction (color → CCT) uses McCamy's cubic approximation in CIE xy

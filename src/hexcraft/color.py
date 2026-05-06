@@ -1,4 +1,4 @@
-"""The Color class — central, immutable, fluent.
+"""The Color class - central, immutable, fluent.
 
 Internal canonical: linear sRGB + alpha. Components may fall outside [0, 1] to
 preserve wide-gamut and HDR colors; gamut mapping is applied at output time.
@@ -214,7 +214,7 @@ class Color:
 
     @property
     def lch(self) -> tuple[float, float, float]:
-        """CIE LCh — polar Lab. ``(lightness, chroma, hue°)``."""
+        """CIE LCh - polar Lab. ``(lightness, chroma, hue°)``."""
         return lab.lab_to_lch(self.lab)
 
     @property
@@ -224,7 +224,7 @@ class Color:
 
     @property
     def oklch(self) -> tuple[float, float, float]:
-        """OKLCh — polar OKLab. ``(lightness, chroma, hue°)``."""
+        """OKLCh - polar OKLab. ``(lightness, chroma, hue°)``."""
         return oklab.oklab_to_oklch(self.oklab)
 
     @property

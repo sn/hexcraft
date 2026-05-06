@@ -61,7 +61,7 @@ def adapt(
     ``method`` selects the cone-response space:
       - ``"bradford"`` (default, widely used in ICC v4 profiles)
       - ``"cat16"`` (used by CIECAM16)
-      - ``"xyz"`` (a.k.a. von Kries with XYZ scaling — simplest, least accurate)
+      - ``"xyz"`` (a.k.a. von Kries with XYZ scaling - simplest, least accurate)
     """
     if method == "xyz":
         sx = dst[0] / src[0]

@@ -1,6 +1,6 @@
 # hexcraft
 
-The complete color library for Python. Parse, convert, manipulate, mix, measure, and visualize color across 11 color spaces — with zero required dependencies and a single fluent `Color` API.
+The complete color library for Python. Parse, convert, manipulate, mix, measure, and visualize color across 11 color spaces - with zero required dependencies and a single fluent `Color` API.
 
 ```python
 from hexcraft import Color
@@ -70,7 +70,7 @@ c.hsl                # (213.16, 0.59, 0.61)
 c.lab                # (58.5, -3.5, -38.7)
 c.oklch              # (0.7, 0.15, 250.0)
 
-# Manipulate (immutable — every method returns a new Color)
+# Manipulate (immutable - every method returns a new Color)
 c.lighten(0.1)
 c.rotate(60)
 c.with_alpha(0.5)
@@ -170,7 +170,7 @@ parse("oklch(0.7 0.15 250)")              # Parsed(space='oklch', components=(0.
 | CMYK (naive)   | `c.cmyk`             | `Color.from_cmyk(0, 1, 1, 0)`           |
 | Kelvin (CCT)   | `c.kelvin`           | `Color.from_kelvin(2700)`               |
 
-`hsl/hsv/hwb` use degrees for hue; `lab/lch/oklab/oklch` use the CIE/OK natural units. Hue is in `[0, 360)`. CMYK is naive algebraic — see [CMYK](#cmyk) for caveats.
+`hsl/hsv/hwb` use degrees for hue; `lab/lch/oklab/oklch` use the CIE/OK natural units. Hue is in `[0, 360)`. CMYK is naive algebraic - see [CMYK](#cmyk) for caveats.
 
 ---
 
@@ -182,7 +182,7 @@ c = Color("#3498db")
 c.alpha                    # 1.0
 c.rgb                      # (52, 152, 219)
 c.rgba                     # (52, 152, 219, 1.0)
-c.srgb                     # (0.204, 0.596, 0.859)  — gamma-encoded, clamped
+c.srgb                     # (0.204, 0.596, 0.859)  - gamma-encoded, clamped
 c.srgb_unclamped           # same but allows out-of-gamut
 c.linear_rgb               # (0.034, 0.318, 0.708)
 c.hsl                      # (204.1, 0.70, 0.53)
@@ -197,9 +197,9 @@ c.p3                       # (0.252, 0.589, 0.851)
 c.cmyk                     # (0.76, 0.31, 0.0, 0.14)
 c.kelvin                   # ~10500 (or None for non-blackbody chromaticities)
 
-c.luminance                # 0.281 — WCAG relative luminance
-c.name                     # 'dodgerblue' — closest CSS named color
-c.in_gamut()               # True/False — within sRGB
+c.luminance                # 0.281 - WCAG relative luminance
+c.name                     # 'dodgerblue' - closest CSS named color
+c.in_gamut()               # True/False - within sRGB
 ```
 
 `linear_rgb` and `srgb_unclamped` may contain values outside `[0, 1]` to faithfully represent wide-gamut and HDR colors. Use `c.to_gamut()` to fold back into sRGB.
@@ -317,7 +317,7 @@ c.tailwind()
 #  950: '#000a16'}
 ```
 
-Both implementations build on OKLCh — they preserve the source hue, hold chroma roughly constant for Material, and ramp chroma for Tailwind so the extreme stops stay legible. Out-of-gamut points are folded back into sRGB via OKLCh chroma reduction.
+Both implementations build on OKLCh - they preserve the source hue, hold chroma roughly constant for Material, and ramp chroma for Tailwind so the extreme stops stay legible. Out-of-gamut points are folded back into sRGB via OKLCh chroma reduction.
 
 ```python
 from hexcraft import (
@@ -409,7 +409,7 @@ apca_lc(Color("#888"), Color("white"))         #  -63.06
 fg = Color("#888888")
 bg = Color("white")
 fixed = find_accessible_pair(fg, bg, ratio=4.5)
-# fixed = Color('#777777') — minimal nudge, still close to original
+# fixed = Color('#777777') - minimal nudge, still close to original
 
 # Method form
 Color("#888").accessible_against(Color("white"), ratio=4.5)
@@ -434,9 +434,9 @@ WCAG ratios are symmetric, in `[1, 21]`. APCA Lc is signed: negative for dark te
 ```python
 from hexcraft import delta_e
 
-delta_e(a, b, method="76")     # CIE76 — Euclidean in Lab, fastest
-delta_e(a, b, method="94")     # CIE94 — graphic-arts weighting
-delta_e(a, b, method="2000")   # CIEDE2000 — current CIE recommendation (default)
+delta_e(a, b, method="76")     # CIE76 - Euclidean in Lab, fastest
+delta_e(a, b, method="94")     # CIE94 - graphic-arts weighting
+delta_e(a, b, method="2000")   # CIEDE2000 - current CIE recommendation (default)
 delta_e(a, b, method="cmc")    # CMC(l:c) with l=2 c=1, textile standard
 delta_e(a, b, method="ok")     # Euclidean in OKLab, modern alternative
 
@@ -528,10 +528,10 @@ brand = [
 ]
 
 closest_from(Color("#ee5544"), brand)
-# Color('#ef4444') — best perceptual match by CIEDE2000
+# Color('#ef4444') - best perceptual match by CIEDE2000
 
 closest_n_from(Color("#ee5544"), brand, n=2)
-# [Color('#ef4444'), Color('#f59e0b')] — sorted by ΔE
+# [Color('#ef4444'), Color('#f59e0b')] - sorted by ΔE
 
 # Use a different metric for image-scale work
 closest_from(target, brand, method="ok")
@@ -546,7 +546,7 @@ The default metric is `"2000"` (CIEDE2000). Use `"ok"` for fast batch matching a
 ```python
 red_p3 = Color("color(display-p3 1 0 0)")
 red_p3.hex                       # '#ff0000' (out-of-gamut clipped to sRGB red)
-red_p3.p3                        # (1.0, 0.0, 0.0) — round-trips through P3
+red_p3.p3                        # (1.0, 0.0, 0.0) - round-trips through P3
 
 c = Color("#3498db")
 c.p3                             # gamma-encoded P3 in [0, 1]
@@ -573,7 +573,7 @@ Color("red").cmyk                # (0.0, 1.0, 1.0, 0.0)
 Color.from_cmyk(0.5, 0.2, 0.0, 0.1)
 ```
 
-This is the algebraic CMYK that browsers and design tools display when no profile is attached. **It is not color-accurate for press output** — real print workflows go through ICC profiles (SWOP, FOGRA, GRACoL, etc.). Use it for quick previews and color picker UI only.
+This is the algebraic CMYK that browsers and design tools display when no profile is attached. **It is not color-accurate for press output** - real print workflows go through ICC profiles (SWOP, FOGRA, GRACoL, etc.). Use it for quick previews and color picker UI only.
 
 ---
 
@@ -742,7 +742,7 @@ Use `hexcraft <command> --help` for full options.
 | `complementary()`, `triadic()`, `tetradic()`, `split_complementary(spread=30)` | `list[Color]` |
 | `material_palette()`                    | `dict[int, Color]` |
 | `tailwind()`                            | `dict[int, Color]` |
-| `css(fmt="hex")`                        | `str` — `"hex"`, `"rgb"`, `"hsl"`, `"hwb"`, `"lab"`, `"lch"`, `"oklab"`, `"oklch"` |
+| `css(fmt="hex")`                        | `str` - `"hex"`, `"rgb"`, `"hsl"`, `"hwb"`, `"lab"`, `"lch"`, `"oklab"`, `"oklch"` |
 
 ### Free functions
 

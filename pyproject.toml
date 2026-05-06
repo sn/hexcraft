@@ -53,11 +53,11 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "N", "SIM"]
-# E501  long lines — color-science constants are clearer on one line
-# E741  ambiguous names (l, I) — l is the standard CMC weight; one-letter math vars
-# N803  uppercase argument — Lab/OKLCh use L, A, B, C
-# N806  uppercase variable — same; M1/M2 matrices, Sl/Sc/Sh CMC weights, kL/kC/kH
-# N814  camelcase imports — matrix constants follow paper conventions
+# E501  long lines - color-science constants are clearer on one line
+# E741  ambiguous names (l, I) - l is the standard CMC weight; one-letter math vars
+# N803  uppercase argument - Lab/OKLCh use L, A, B, C
+# N806  uppercase variable - same; M1/M2 matrices, Sl/Sc/Sh CMC weights, kL/kC/kH
+# N814  camelcase imports - matrix constants follow paper conventions
 ignore = ["E501", "E741", "N803", "N806", "N814"]
 
 [tool.ruff.lint.per-file-ignores]

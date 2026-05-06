@@ -4,11 +4,11 @@ extend-select =
     # B  bugbear: likely bugs
     B,
 extend-ignore =
-    # E203  whitespace before ':' — conflicts with black/PEP 8 reading of slices
+    # E203  whitespace before ':' - conflicts with black/PEP 8 reading of slices
     E203,
-    # E501  long lines — color-science constants are clearer on one line
+    # E501  long lines - color-science constants are clearer on one line
     E501,
-    # E741  ambiguous names (l, I, O) — l is the standard CMC weight, etc.
+    # E741  ambiguous names (l, I, O) - l is the standard CMC weight, etc.
     E741,
     # W503  line break before binary operator (PEP 8 now recommends it)
     W503,

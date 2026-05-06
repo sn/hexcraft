@@ -1,8 +1,9 @@
-"""hexcraft — the complete color library for Python."""
+"""hexcraft - the complete color library for Python."""
 
 from __future__ import annotations
 
-from importlib.metadata import PackageNotFoundError, version as _pkg_version
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as _pkg_version
 
 from . import colormaps
 from .accessibility import best_text_color, find_accessible_pair

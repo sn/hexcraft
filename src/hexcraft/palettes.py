@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 def complementary(c: Color) -> list[Color]:
-    """Return ``[c, c rotated 180°]`` — the color and its complement."""
+    """Return ``[c, c rotated 180°]`` - the color and its complement."""
     return [c, c.rotate(180.0)]
 
 
@@ -39,7 +39,7 @@ def split_complementary(c: Color, *, spread: float = 30.0) -> list[Color]:
 
 
 def square(c: Color) -> list[Color]:
-    """Alias for ``tetradic`` — four hues 90° apart."""
+    """Alias for ``tetradic`` - four hues 90° apart."""
     return tetradic(c)
 
 

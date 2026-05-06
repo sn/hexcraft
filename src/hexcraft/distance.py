@@ -1,10 +1,10 @@
 """Color difference (deltaE).
 
-- ``76``: CIE76 — Euclidean in Lab. Fast, only roughly perceptual.
-- ``94``: CIE94 — graphics-arts variant, weights chroma/hue separately.
-- ``2000``: CIEDE2000 — current CIE recommendation.
-- ``cmc``: CMC(l:c) — textile-industry standard, default l=2, c=1 (acceptability).
-- ``ok``: Euclidean in OKLab — fast and well-behaved across the visible gamut.
+- ``76``: CIE76 - Euclidean in Lab. Fast, only roughly perceptual.
+- ``94``: CIE94 - graphics-arts variant, weights chroma/hue separately.
+- ``2000``: CIEDE2000 - current CIE recommendation.
+- ``cmc``: CMC(l:c) - textile-industry standard, default l=2, c=1 (acceptability).
+- ``ok``: Euclidean in OKLab - fast and well-behaved across the visible gamut.
 """
 
 from __future__ import annotations
@@ -47,11 +47,11 @@ def delta_e(a: Color, b: Color, *, method: Literal["76", "94", "2000", "cmc", "o
     """Color difference between ``a`` and ``b``.
 
     ``method``:
-      - ``"76"``   CIE76 — Euclidean distance in Lab. Fast, only roughly perceptual.
-      - ``"94"``   CIE94 — graphic-arts variant weighting chroma and hue.
-      - ``"2000"`` CIEDE2000 — current CIE recommendation (default).
+      - ``"76"``   CIE76 - Euclidean distance in Lab. Fast, only roughly perceptual.
+      - ``"94"``   CIE94 - graphic-arts variant weighting chroma and hue.
+      - ``"2000"`` CIEDE2000 - current CIE recommendation (default).
       - ``"cmc"``  CMC(l:c) at l=2 c=1 (textile acceptability).
-      - ``"ok"``   Euclidean distance in OKLab — fast modern alternative.
+      - ``"ok"``   Euclidean distance in OKLab - fast modern alternative.
 
     Rough thresholds for CIEDE2000: <1 imperceptible, 1–2 perceptible to a
     trained eye, >5 clearly different.

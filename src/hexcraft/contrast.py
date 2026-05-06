@@ -28,7 +28,7 @@ def passes_wcag(fg: Color, bg: Color, level: str = "AA", *, large: bool = False)
     return ratio >= (3.0 if large else 4.5)
 
 
-# APCA — SAPC W3-style implementation. Constants from APCA-W3 / SAPC-APCA.
+# APCA - SAPC W3-style implementation. Constants from APCA-W3 / SAPC-APCA.
 # Reference: https://www.w3.org/TR/WCAG-3-conformance/#contrast-apca
 _NORM_BG = 0.56
 _NORM_TXT = 0.57
