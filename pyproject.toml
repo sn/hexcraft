@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "hexcraft"
-version = "0.5.0"
+version = "1.0.0"
 description = "The complete color library for Python: parsing, conversion, manipulation, contrast, palettes, and color science across 10+ color spaces."
 readme = "README.md"
 requires-python = ">=3.10"

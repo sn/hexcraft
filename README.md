@@ -1,6 +1,15 @@
 # hexcraft
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/hexcraft-banner.svg" alt="hexcraft - perceptually uniform OKLCh hue spectrum" width="100%">
+</p>
+
 The complete color library for Python. Parse, convert, manipulate, mix, measure, and visualize color across 11 color spaces - with zero required dependencies and a single fluent `Color` API.
+
+[![PyPI](https://img.shields.io/pypi/v/hexcraft?color=green)](https://pypi.org/project/hexcraft/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hexcraft)](https://pypi.org/project/hexcrat/)
+[![PyPI - License](https://img.shields.io/pypi/l/hexcraft)](https://pypi.org/project/hexcraft/)
+[![image](https://img.shields.io/github/actions/workflow/status/sn/hexcraft/test.yml?branch=main)](https://github.com/sn/hexcraft/actions?query=branch%3Amain)
 
 ```python
 from hexcraft import Color
@@ -17,28 +26,34 @@ c.simulate("deuteranopia")   # color as seen by red-green color-blind viewers
 
 ## Table of contents
 
-- [Installation](#installation)
-- [Quick start](#quick-start)
-- [Parsing](#parsing)
-- [Color spaces](#color-spaces)
-- [Reading components](#reading-components)
-- [Manipulation](#manipulation)
-- [Mixing and blending](#mixing-and-blending)
-- [Palettes and harmonies](#palettes-and-harmonies)
-- [Tonal scales (Material You, Tailwind)](#tonal-scales-material-you-tailwind)
-- [Perceptual colormaps](#perceptual-colormaps)
-- [Accessibility (WCAG, APCA)](#accessibility-wcag-apca)
-- [Color difference (ΔE)](#color-difference-Δe)
-- [Gamut mapping](#gamut-mapping)
-- [Color blindness simulation and daltonization](#color-blindness-simulation-and-daltonization)
-- [Color temperature (Kelvin)](#color-temperature-kelvin)
-- [Closest match in a palette](#closest-match-in-a-palette)
-- [Display-P3 and chromatic adaptation](#display-p3-and-chromatic-adaptation)
-- [CMYK](#cmyk)
-- [Numpy arrays and images](#numpy-arrays-and-images)
-- [Command-line interface](#command-line-interface)
-- [API reference](#api-reference)
-- [License](#license)
+- [hexcraft](#hexcraft)
+  - [Table of contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Quick start](#quick-start)
+  - [Examples](#examples)
+  - [Parsing](#parsing)
+  - [Color spaces](#color-spaces)
+  - [Reading components](#reading-components)
+  - [Manipulation](#manipulation)
+  - [Mixing and blending](#mixing-and-blending)
+  - [Palettes and harmonies](#palettes-and-harmonies)
+  - [Tonal scales (Material You, Tailwind)](#tonal-scales-material-you-tailwind)
+  - [Perceptual colormaps](#perceptual-colormaps)
+  - [Accessibility (WCAG, APCA)](#accessibility-wcag-apca)
+  - [Color difference (ΔE)](#color-difference-δe)
+  - [Gamut mapping](#gamut-mapping)
+  - [Color blindness simulation and daltonization](#color-blindness-simulation-and-daltonization)
+  - [Color temperature (Kelvin)](#color-temperature-kelvin)
+  - [Closest match in a palette](#closest-match-in-a-palette)
+  - [Display-P3 and chromatic adaptation](#display-p3-and-chromatic-adaptation)
+  - [CMYK](#cmyk)
+  - [Numpy arrays and images](#numpy-arrays-and-images)
+  - [Command-line interface](#command-line-interface)
+  - [API reference](#api-reference)
+    - [`hexcraft.Color`](#hexcraftcolor)
+    - [Free functions](#free-functions)
+    - [Submodules](#submodules)
+  - [License](#license)
 
 ---
 
@@ -96,7 +111,39 @@ c.css("oklch")                            # 'oklch(0.7 0.15 250)'
 
 ---
 
+## Examples
+
+Twelve runnable scripts in [`examples/`](examples/) cover the full feature
+surface, with ANSI 24-bit color output so the gradients, palettes, and
+accessibility checks are visible in any modern terminal:
+
+```bash
+python examples/01_quickstart.py
+```
+
+| #   | File                                                                                          | Demonstrates                                                            |
+| --- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 01  | [`01_quickstart.py`](examples/01_quickstart.py)                                               | Parse, convert, manipulate, contrast, mix - the 60-second tour          |
+| 02  | [`02_parsing_anything.py`](examples/02_parsing_anything.py)                                   | Every CSS Color 4 syntax, hex variant, unit, and named color            |
+| 03  | [`03_perceptual_vs_naive_mixing.py`](examples/03_perceptual_vs_naive_mixing.py)               | Same gradient interpolated in 5 spaces - sRGB muddies, OKLab doesn't    |
+| 04  | [`04_palette_harmonies.py`](examples/04_palette_harmonies.py)                                 | Every classic harmony plus tints / shades / tones / monochromatic       |
+| 05  | [`05_design_system.py`](examples/05_design_system.py)                                         | Material You + Tailwind 50-950 scales from one brand color              |
+| 06  | [`06_accessibility_audit.py`](examples/06_accessibility_audit.py)                             | WCAG / APCA pass-fail with auto-suggested fixes                         |
+| 07  | [`07_color_blindness.py`](examples/07_color_blindness.py)                                     | Simulate + daltonize a palette per CVD type                             |
+| 08  | [`08_perceptual_colormaps.py`](examples/08_perceptual_colormaps.py)                           | All 11 bundled colormaps sampled side-by-side                           |
+| 09  | [`09_color_temperature.py`](examples/09_color_temperature.py)                                 | Kelvin temperatures from candle flame to deep sky                       |
+| 10  | [`10_brand_color_match.py`](examples/10_brand_color_match.py)                                 | `closest_from` for normalizing input to a brand palette                 |
+| 11  | [`11_image_palette.py`](examples/11_image_palette.py) *(numpy)*                               | Extract dominant colors from an image via OKLab k-means                 |
+| 12  | [`12_theme_generator.py`](examples/12_theme_generator.py)                                     | Full light + dark theme tokens with WCAG-checked text pairings          |
+
+See [`examples/README.md`](examples/README.md) for the same table with a
+viewing-tips section.
+
+---
+
 ## Parsing
+
+> See it: [`02_parsing_anything.py`](examples/02_parsing_anything.py)
 
 `Color(value)` accepts every CSS Color 4 syntax, all 148 CSS named colors, hex with optional alpha, and existing `Color` objects:
 
@@ -235,6 +282,8 @@ Color("red") == Color("#ff0000") == Color("rgb(255, 0, 0)")  # True
 
 ## Mixing and blending
 
+> See it: [`03_perceptual_vs_naive_mixing.py`](examples/03_perceptual_vs_naive_mixing.py)
+
 `mix` interpolates two colors in any space; the default is OKLab for smooth, hue-faithful results. Hue spaces (`hsl`, `hsv`, `hwb`, `lch`, `oklch`) automatically take the shortest-arc path.
 
 ```python
@@ -260,6 +309,8 @@ blend(bg, fg)              # red showing through 50% blue
 ---
 
 ## Palettes and harmonies
+
+> See it: [`04_palette_harmonies.py`](examples/04_palette_harmonies.py)
 
 Module-level functions return a list of `Color`. Equivalent methods on `Color` return the same lists:
 
@@ -303,6 +354,8 @@ stops([Color("red"), Color("green"), Color("blue")], steps=20, space="oklab")
 
 ## Tonal scales (Material You, Tailwind)
 
+> See it: [`05_design_system.py`](examples/05_design_system.py), [`12_theme_generator.py`](examples/12_theme_generator.py)
+
 ```python
 c = Color("#3498db")
 
@@ -334,6 +387,8 @@ TAILWIND_STOPS                   # (50, 100, 200, ..., 950)
 ---
 
 ## Perceptual colormaps
+
+> See it: [`08_perceptual_colormaps.py`](examples/08_perceptual_colormaps.py)
 
 Eleven named colormaps are bundled, each interpolated in OKLab so that any sample size stays perceptually uniform.
 
@@ -384,6 +439,8 @@ ALL_MAPS["RdBu"](0.7)
 ---
 
 ## Accessibility (WCAG, APCA)
+
+> See it: [`06_accessibility_audit.py`](examples/06_accessibility_audit.py)
 
 ```python
 from hexcraft import (
@@ -468,6 +525,8 @@ clip(wide).hex
 
 ## Color blindness simulation and daltonization
 
+> See it: [`07_color_blindness.py`](examples/07_color_blindness.py)
+
 ```python
 from hexcraft import Color, simulate, daltonize
 
@@ -499,6 +558,8 @@ button_b.daltonize("deuteranopia")
 
 ## Color temperature (Kelvin)
 
+> See it: [`09_color_temperature.py`](examples/09_color_temperature.py)
+
 ```python
 from hexcraft import Color
 
@@ -516,6 +577,8 @@ Forward direction uses Tanner Helland's piecewise approximation. Inverse (CCT fr
 ---
 
 ## Closest match in a palette
+
+> See it: [`10_brand_color_match.py`](examples/10_brand_color_match.py)
 
 ```python
 from hexcraft import Color, closest_from, closest_n_from
@@ -578,6 +641,8 @@ This is the algebraic CMYK that browsers and design tools display when no profil
 ---
 
 ## Numpy arrays and images
+
+> See it: [`11_image_palette.py`](examples/11_image_palette.py)
 
 `hexcraft.arrays` (requires `numpy`) provides vectorized conversions for image-scale work:
 
