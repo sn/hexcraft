@@ -113,6 +113,10 @@ c.css("oklch")  # 'oklch(0.7 0.15 250)'
 
 ## Examples
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/showcase.svg" alt="hexcraft showcase: a perceptual OKLCh hue spectrum, a Tailwind 50-950 scale, and the viridis, magma and turbo colormaps" width="100%">
+</p>
+
 Twelve runnable scripts in [`examples/`](examples/) cover the full feature
 surface, with ANSI 24-bit color output so the gradients, palettes, and
 accessibility checks are visible in any modern terminal:
@@ -282,6 +286,10 @@ Color("red") == Color("#ff0000") == Color("rgb(255, 0, 0)")  # True
 
 ## Mixing and blending
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/mixing.svg" alt="The same red-to-blue gradient interpolated in sRGB, OKLab and OKLCh; sRGB darkens and muddies through the middle while OKLab and OKLCh hold lightness and chroma" width="100%">
+</p>
+
 > See it: [`03_perceptual_vs_naive_mixing.py`](examples/03_perceptual_vs_naive_mixing.py)
 
 `mix` interpolates two colors in any space; the default is OKLab for smooth, hue-faithful results. Hue spaces (`hsl`, `hsv`, `hwb`, `lch`, `oklch`) automatically take the shortest-arc path.
@@ -309,6 +317,10 @@ blend(bg, fg)  # red showing through 50% blue
 ---
 
 ## Palettes and harmonies
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/harmonies.svg" alt="Complementary, analogous, triadic, tetradic and split-complementary harmonies generated from #3498db" width="100%">
+</p>
 
 > See it: [`04_palette_harmonies.py`](examples/04_palette_harmonies.py)
 
@@ -354,6 +366,10 @@ stops([Color("red"), Color("green"), Color("blue")], steps=20, space="oklab")
 
 ## Tonal scales (Material You, Tailwind)
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/tonal-scales.svg" alt="Material You 0-100 tonal palette and Tailwind 50-950 scale generated from #3498db, each stop labelled" width="100%">
+</p>
+
 > See it: [`05_design_system.py`](examples/05_design_system.py), [`12_theme_generator.py`](examples/12_theme_generator.py)
 
 ```python
@@ -387,6 +403,10 @@ TAILWIND_STOPS             # (50, 100, 200, ..., 950)
 ---
 
 ## Perceptual colormaps
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/colormaps.svg" alt="All 11 bundled colormaps grouped into sequential, diverging and qualitative, each interpolated in OKLab" width="100%">
+</p>
 
 > See it: [`08_perceptual_colormaps.py`](examples/08_perceptual_colormaps.py)
 
@@ -439,6 +459,10 @@ ALL_MAPS["RdBu"](0.7)
 ---
 
 ## Accessibility (WCAG, APCA)
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/contrast.svg" alt="WCAG contrast samples with ratio, AA and AAA pass/fail badges, plus accessible_against() nudging a failing pair until it passes" width="100%">
+</p>
 
 > See it: [`06_accessibility_audit.py`](examples/06_accessibility_audit.py)
 
@@ -525,6 +549,10 @@ clip(wide).hex
 
 ## Color blindness simulation and daltonization
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/color-blindness.svg" alt="A six-color palette shown as seen with normal vision and simulated protanopia, deuteranopia and tritanopia" width="100%">
+</p>
+
 > See it: [`07_color_blindness.py`](examples/07_color_blindness.py)
 
 ```python
@@ -557,6 +585,10 @@ button_b.daltonize("deuteranopia")
 ---
 
 ## Color temperature (Kelvin)
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/temperature.svg" alt="Blackbody color-temperature strip from 1500K to 12000K produced by Color.from_kelvin, with candle, tungsten, daylight, D65 and sky markers" width="100%">
+</p>
 
 > See it: [`09_color_temperature.py`](examples/09_color_temperature.py)
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 342" width="720" height="342" role="img">
+<text x="24.00" y="22.00" font-family="sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start">WCAG contrast — ratio, AA &amp; AAA (normal text)</text>
+<rect x="24.00" y="40.00" width="190.00" height="40.00" rx="8" ry="8" fill="#2f6fed" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="119.00" y="65.25" font-family="sans-serif" font-size="15" font-weight="600" fill="#ffffff" text-anchor="middle">Sample text</text>
+<text x="236.00" y="64.90" font-family="sans-serif" font-size="14" font-weight="600" fill="#888888" text-anchor="start">4.55:1</text>
+<rect x="328.00" y="49.00" width="60.00" height="22.00" rx="11" ry="11" fill="#1f9d55"/>
+<text x="358.00" y="64.20" font-family="sans-serif" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">AA PASS</text>
+<rect x="398.00" y="49.00" width="60.00" height="22.00" rx="11" ry="11" fill="#d1242f"/>
+<text x="428.00" y="64.20" font-family="sans-serif" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">AAA FAIL</text>
+<rect x="24.00" y="94.00" width="190.00" height="40.00" rx="8" ry="8" fill="#f4b400" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="119.00" y="119.25" font-family="sans-serif" font-size="15" font-weight="600" fill="#000000" text-anchor="middle">Sample text</text>
+<text x="236.00" y="118.90" font-family="sans-serif" font-size="14" font-weight="600" fill="#888888" text-anchor="start">11.38:1</text>
+<rect x="328.00" y="103.00" width="60.00" height="22.00" rx="11" ry="11" fill="#1f9d55"/>
+<text x="358.00" y="118.20" font-family="sans-serif" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">AA PASS</text>
+<rect x="398.00" y="103.00" width="60.00" height="22.00" rx="11" ry="11" fill="#1f9d55"/>
+<text x="428.00" y="118.20" font-family="sans-serif" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">AAA PASS</text>
+<rect x="24.00" y="148.00" width="190.00" height="40.00" rx="8" ry="8" fill="#1f9d55" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="119.00" y="173.25" font-family="sans-serif" font-size="15" font-weight="600" fill="#ffffff" text-anchor="middle">Sample text</text>
+<text x="236.00" y="172.90" font-family="sans-serif" font-size="14" font-weight="600" fill="#888888" text-anchor="start">3.49:1</text>
+<rect x="328.00" y="157.00" width="60.00" height="22.00" rx="11" ry="11" fill="#d1242f"/>
+<text x="358.00" y="172.20" font-family="sans-serif" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">AA FAIL</text>
+<rect x="398.00" y="157.00" width="60.00" height="22.00" rx="11" ry="11" fill="#d1242f"/>
+<text x="428.00" y="172.20" font-family="sans-serif" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">AAA FAIL</text>
+<rect x="24.00" y="202.00" width="190.00" height="40.00" rx="8" ry="8" fill="#ffffff" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="119.00" y="227.25" font-family="sans-serif" font-size="15" font-weight="600" fill="#5b6470" text-anchor="middle">Sample text</text>
+<text x="236.00" y="226.90" font-family="sans-serif" font-size="14" font-weight="600" fill="#888888" text-anchor="start">6.00:1</text>
+<rect x="328.00" y="211.00" width="60.00" height="22.00" rx="11" ry="11" fill="#1f9d55"/>
+<text x="358.00" y="226.20" font-family="sans-serif" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">AA PASS</text>
+<rect x="398.00" y="211.00" width="60.00" height="22.00" rx="11" ry="11" fill="#d1242f"/>
+<text x="428.00" y="226.20" font-family="sans-serif" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">AAA FAIL</text>
+<text x="24.00" y="262.00" font-family="sans-serif" font-size="12" font-weight="400" fill="#888888" text-anchor="start">accessible_against() nudges a failing pair until it passes:</text>
+<rect x="24.00" y="276.00" width="150.00" height="40.00" rx="8" ry="8" fill="#ffffff" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="99.00" y="300.90" font-family="sans-serif" font-size="14" font-weight="600" fill="#9aa7b4" text-anchor="middle">Sample</text>
+<text x="99.00" y="332.00" font-family="sans-serif" font-size="11" font-weight="400" fill="#d1242f" text-anchor="middle">#9aa7b4 · 2.45:1 FAIL</text>
+<path d="M190 296 h34" stroke="#888888" stroke-width="2" fill="none"/>
+<path d="M224 296 l-9 -5 v10 z" fill="#888888"/>
+<rect x="236.00" y="276.00" width="150.00" height="40.00" rx="8" ry="8" fill="#ffffff" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="311.00" y="300.90" font-family="sans-serif" font-size="14" font-weight="600" fill="#6c7884" text-anchor="middle">Sample</text>
+<text x="311.00" y="332.00" font-family="sans-serif" font-size="11" font-weight="400" fill="#1f9d55" text-anchor="middle">#6c7884 · 4.50:1 PASS</text>
+</svg>

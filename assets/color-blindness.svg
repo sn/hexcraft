@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 284" width="720" height="284" role="img">
+<text x="24.00" y="22.00" font-family="sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start">The same palette under color-vision deficiencies</text>
+<text x="138.00" y="66.55" font-family="sans-serif" font-size="13" font-weight="400" fill="#888888" text-anchor="end">Normal</text>
+<rect x="152.00" y="40.00" width="82.33" height="44.00" rx="8" ry="8" fill="#e11d48" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="244.33" y="40.00" width="82.33" height="44.00" rx="8" ry="8" fill="#16a34a" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="336.67" y="40.00" width="82.33" height="44.00" rx="8" ry="8" fill="#2563eb" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="429.00" y="40.00" width="82.33" height="44.00" rx="8" ry="8" fill="#f59e0b" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="521.33" y="40.00" width="82.33" height="44.00" rx="8" ry="8" fill="#7c3aed" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="613.67" y="40.00" width="82.33" height="44.00" rx="8" ry="8" fill="#0d9488" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="138.00" y="126.55" font-family="sans-serif" font-size="13" font-weight="400" fill="#888888" text-anchor="end">Protanopia</text>
+<rect x="152.00" y="100.00" width="82.33" height="44.00" rx="8" ry="8" fill="#5f5a48" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="244.33" y="100.00" width="82.33" height="44.00" rx="8" ry="8" fill="#a49442" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="336.67" y="100.00" width="82.33" height="44.00" rx="8" ry="8" fill="#0076f0" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="429.00" y="100.00" width="82.33" height="44.00" rx="8" ry="8" fill="#bba400" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="521.33" y="100.00" width="82.33" height="44.00" rx="8" ry="8" fill="#0069f2" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="613.67" y="100.00" width="82.33" height="44.00" rx="8" ry="8" fill="#8c8b88" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="138.00" y="186.55" font-family="sans-serif" font-size="13" font-weight="400" fill="#888888" text-anchor="end">Deuteranopia</text>
+<rect x="152.00" y="160.00" width="82.33" height="44.00" rx="8" ry="8" fill="#8e8242" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="244.33" y="160.00" width="82.33" height="44.00" rx="8" ry="8" fill="#958951" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="336.67" y="160.00" width="82.33" height="44.00" rx="8" ry="8" fill="#0064e8" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="429.00" y="160.00" width="82.33" height="44.00" rx="8" ry="8" fill="#d0b914" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="521.33" y="160.00" width="82.33" height="44.00" rx="8" ry="8" fill="#0063ea" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="613.67" y="160.00" width="82.33" height="44.00" rx="8" ry="8" fill="#7c7f89" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="138.00" y="246.55" font-family="sans-serif" font-size="13" font-weight="400" fill="#888888" text-anchor="end">Tritanopia</text>
+<rect x="152.00" y="220.00" width="82.33" height="44.00" rx="8" ry="8" fill="#f70032" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="244.33" y="220.00" width="82.33" height="44.00" rx="8" ry="8" fill="#00a08f" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="336.67" y="220.00" width="82.33" height="44.00" rx="8" ry="8" fill="#00869d" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="429.00" y="220.00" width="82.33" height="44.00" rx="8" ry="8" fill="#ff8887" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="521.33" y="220.00" width="82.33" height="44.00" rx="8" ry="8" fill="#586c92" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="613.67" y="220.00" width="82.33" height="44.00" rx="8" ry="8" fill="#009790" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+</svg>

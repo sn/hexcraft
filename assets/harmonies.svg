@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 416" width="720" height="416" role="img">
+<text x="24.00" y="24.00" font-family="sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start">Color harmonies from #3498db</text>
+<text x="176.00" y="74.55" font-family="sans-serif" font-size="13" font-weight="400" fill="#888888" text-anchor="end">Complementary</text>
+<rect x="192.00" y="42.00" width="56.00" height="56.00" rx="10" ry="10" fill="#3498db" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="260.00" y="42.00" width="56.00" height="56.00" rx="10" ry="10" fill="#c97b26" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="176.00" y="148.55" font-family="sans-serif" font-size="13" font-weight="400" fill="#888888" text-anchor="end">Analogous</text>
+<rect x="192.00" y="116.00" width="56.00" height="56.00" rx="10" ry="10" fill="#00aa97" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="260.00" y="116.00" width="56.00" height="56.00" rx="10" ry="10" fill="#00a4c0" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="328.00" y="116.00" width="56.00" height="56.00" rx="10" ry="10" fill="#3498db" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="396.00" y="116.00" width="56.00" height="56.00" rx="10" ry="10" fill="#7589e2" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="464.00" y="116.00" width="56.00" height="56.00" rx="10" ry="10" fill="#a17ad3" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="176.00" y="222.55" font-family="sans-serif" font-size="13" font-weight="400" fill="#888888" text-anchor="end">Triadic</text>
+<rect x="192.00" y="190.00" width="56.00" height="56.00" rx="10" ry="10" fill="#3498db" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="260.00" y="190.00" width="56.00" height="56.00" rx="10" ry="10" fill="#d26a89" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="328.00" y="190.00" width="56.00" height="56.00" rx="10" ry="10" fill="#819d33" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="176.00" y="296.55" font-family="sans-serif" font-size="13" font-weight="400" fill="#888888" text-anchor="end">Tetradic</text>
+<rect x="192.00" y="264.00" width="56.00" height="56.00" rx="10" ry="10" fill="#3498db" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="260.00" y="264.00" width="56.00" height="56.00" rx="10" ry="10" fill="#c06fb4" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="328.00" y="264.00" width="56.00" height="56.00" rx="10" ry="10" fill="#c97b26" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="396.00" y="264.00" width="56.00" height="56.00" rx="10" ry="10" fill="#42a767" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="176.00" y="370.55" font-family="sans-serif" font-size="13" font-weight="400" fill="#888888" text-anchor="end">Split-complementary</text>
+<rect x="192.00" y="338.00" width="56.00" height="56.00" rx="10" ry="10" fill="#3498db" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="260.00" y="338.00" width="56.00" height="56.00" rx="10" ry="10" fill="#d56e59" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<rect x="328.00" y="338.00" width="56.00" height="56.00" rx="10" ry="10" fill="#ad8d00" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+</svg>
