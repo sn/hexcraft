@@ -28,8 +28,7 @@ dependencies = []
 
 [project.optional-dependencies]
 numpy = ["numpy>=1.24"]
-science = ["colour-science>=0.4.4", "numpy>=1.24"]
-dev = ["pytest>=7", "pytest-cov", "ruff", "flake8", "mypy"]
+dev = ["pytest>=7", "pytest-cov", "ruff", "mypy"]
 
 [project.scripts]
 hexcraft = "hexcraft.cli:main"

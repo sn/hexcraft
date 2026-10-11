@@ -6,7 +6,6 @@ preserve wide-gamut and HDR colors; gamut mapping is applied at output time.
 
 from __future__ import annotations
 
-import math
 from typing import Literal
 
 from . import named, parsers
@@ -33,21 +32,40 @@ class Color:
     """
 
     __slots__ = ("_lr", "_lg", "_lb", "_a")
+    _lr: float
+    _lg: float
+    _lb: float
+    _a: float
 
     def __init__(self, value: str | Color | tuple[float, ...]) -> None:
         if isinstance(value, Color):
-            self._lr, self._lg, self._lb, self._a = value._lr, value._lg, value._lb, value._a
+            self._set(value._lr, value._lg, value._lb, value._a)
             return
         if isinstance(value, str):
-            self._lr, self._lg, self._lb, self._a = _from_parsed(parsers.parse(value))
+            self._set(*_from_parsed(parsers.parse(value)))
             return
         if isinstance(value, tuple) and len(value) in (3, 4):
             r, g, b = value[0], value[1], value[2]
             a = value[3] if len(value) == 4 else 1.0
-            self._lr, self._lg, self._lb = srgb.decode_rgb((r, g, b))
-            self._a = a
+            self._set(*srgb.decode_rgb((r, g, b)), a)
             return
         raise TypeError(f"cannot construct Color from {type(value).__name__}")
+
+    def _set(self, lr: float, lg: float, lb: float, a: float) -> None:
+        """Initialize the slots once; alpha is clamped to [0, 1]."""
+        object.__setattr__(self, "_lr", lr)
+        object.__setattr__(self, "_lg", lg)
+        object.__setattr__(self, "_lb", lb)
+        object.__setattr__(self, "_a", max(0.0, min(1.0, a)))
+
+    def __setattr__(self, name: str, value: object) -> None:
+        raise AttributeError(f"{type(self).__name__} is immutable")
+
+    def __delattr__(self, name: str) -> None:
+        raise AttributeError(f"{type(self).__name__} is immutable")
+
+    def __reduce__(self) -> tuple[object, tuple[float, float, float, float]]:
+        return (type(self).from_linear_rgb, (self._lr, self._lg, self._lb, self._a))
 
     # ── Constructors ──────────────────────────────────────────────────────
 
@@ -60,7 +78,7 @@ class Color:
         ``from_rgb`` for gamma-encoded input.
         """
         obj = cls.__new__(cls)
-        obj._lr, obj._lg, obj._lb, obj._a = r, g, b, a
+        obj._set(r, g, b, a)
         return obj
 
     @classmethod
@@ -155,7 +173,7 @@ class Color:
 
     @property
     def alpha(self) -> float:
-        """Alpha channel in [0, 1]."""
+        """Alpha channel in [0, 1]. Constructors clamp out-of-range alpha."""
         return self._a
 
     @property
@@ -188,11 +206,11 @@ class Color:
 
     @property
     def hex(self) -> str:
-        """``#rrggbb`` or ``#rrggbbaa`` (when alpha < 1)."""
+        """``#rrggbb``, or ``#rrggbbaa`` when alpha is below 1 at 8-bit precision."""
         r, g, b = self.rgb
-        if self._a >= 1.0:
-            return f"#{r:02x}{g:02x}{b:02x}"
         a = round(self._a * 255)
+        if a >= 255:
+            return f"#{r:02x}{g:02x}{b:02x}"
         return f"#{r:02x}{g:02x}{b:02x}{a:02x}"
 
     @property
@@ -242,7 +260,7 @@ class Color:
 
     @property
     def kelvin(self) -> float | None:
-        """Approximate CCT in K via McCamy's formula. ``None`` outside ~2000–25000 K."""
+        """Approximate CCT in K. ``None`` if not near the blackbody locus or outside 1000–25000 K."""
         from .temperature import rgb_to_kelvin
         return rgb_to_kelvin(self)
 
@@ -317,9 +335,9 @@ class Color:
         return type(self).from_oklch(L, 0.0, 0.0, self._a)
 
     def invert(self) -> Color:
-        """Invert each linear sRGB component (``1 - c``)."""
-        r, g, b = self.linear_rgb
-        return type(self).from_linear_rgb(1.0 - r, 1.0 - g, 1.0 - b, self._a)
+        """Invert each gamma-encoded sRGB component (``1 - c``), like CSS ``invert()``."""
+        r, g, b = self.srgb
+        return type(self).from_rgb(1.0 - r, 1.0 - g, 1.0 - b, self._a)
 
     def complement(self) -> Color:
         """Rotate hue by 180°."""
@@ -328,7 +346,7 @@ class Color:
     def mix(self, other: Color, amount: float = 0.5, space: Space = "oklab") -> Color:
         """Mix with ``other`` in ``space``. ``amount`` weights ``other`` (0 → self, 1 → other)."""
         from .manipulate import mix as _mix
-        return _mix(self, other, amount, space=space)  # type: ignore[return-value]
+        return _mix(self, other, amount, space=space)
 
     def contrast(self, other: Color, *, method: Literal["wcag", "apca"] = "wcag") -> float:
         """Contrast against ``other``. Returns WCAG ratio (default) or signed APCA Lc."""
@@ -343,21 +361,21 @@ class Color:
         return _de(self, other, method=method)
 
     def to_gamut(self, space: Literal["srgb"] = "srgb") -> Color:
-        """Reduce OKLCh chroma until the result fits the target gamut (CSS Color 4)."""
+        """Reduce OKLCh chroma until the result fits the target gamut (simplified CSS Color 4)."""
         from .gamut import map_to_gamut
-        return map_to_gamut(self, space=space)  # type: ignore[return-value]
+        return map_to_gamut(self, space=space)
 
     # ── Palette methods (return list of Color) ────────────────────────────
 
     def tints(self, count: int = 5) -> list[Color]:
         """``count`` colors stepping from this color toward white."""
         from .palettes import tints as _tints
-        return _tints(self, count=count)  # type: ignore[return-value]
+        return _tints(self, count=count)
 
     def shades(self, count: int = 5) -> list[Color]:
         """``count`` colors stepping from this color toward black."""
         from .palettes import shades as _shades
-        return _shades(self, count=count)  # type: ignore[return-value]
+        return _shades(self, count=count)
 
     lighter = tints
     darker = shades
@@ -365,67 +383,67 @@ class Color:
     def tones(self, count: int = 5) -> list[Color]:
         """``count`` colors stepping from this color toward equal-luminance gray."""
         from .palettes import tones as _tones
-        return _tones(self, count=count)  # type: ignore[return-value]
+        return _tones(self, count=count)
 
     def monochromatic(self, count: int = 5) -> list[Color]:
-        """``count`` colors evenly spaced in OKLab lightness, same hue and chroma."""
+        """``count`` colors from black to white, evenly spaced in OKLab lightness at this hue."""
         from .palettes import monochromatic as _mono
-        return _mono(self, count=count)  # type: ignore[return-value]
+        return _mono(self, count=count)
 
     def analogous(self, count: int = 3, spread: float = 30.0) -> list[Color]:
         """``count`` analogous colors centered on this one, spaced by ``spread`` degrees."""
         from .palettes import analogous as _ana
-        return _ana(self, count=count, spread=spread)  # type: ignore[return-value]
+        return _ana(self, count=count, spread=spread)
 
     def complementary(self) -> list[Color]:
         """Two colors: this one and its 180° complement."""
         from .palettes import complementary as _c
-        return _c(self)  # type: ignore[return-value]
+        return _c(self)
 
     def triadic(self) -> list[Color]:
         """Three colors evenly spaced 120° apart in hue."""
         from .palettes import triadic as _t
-        return _t(self)  # type: ignore[return-value]
+        return _t(self)
 
     def tetradic(self) -> list[Color]:
         """Four colors evenly spaced 90° apart in hue."""
         from .palettes import tetradic as _t
-        return _t(self)  # type: ignore[return-value]
+        return _t(self)
 
     def split_complementary(self, spread: float = 30.0) -> list[Color]:
         """Three colors: this one plus the two flanking the complement at ±``spread``°."""
         from .palettes import split_complementary as _sc
-        return _sc(self, spread=spread)  # type: ignore[return-value]
+        return _sc(self, spread=spread)
 
     # ── CVD + accessibility ───────────────────────────────────────────────
 
     def simulate(self, kind: Literal["protanopia", "deuteranopia", "tritanopia"], severity: float = 1.0) -> Color:
         """Simulate how this color appears to a viewer with the given CVD."""
         from .cvd import simulate as _sim
-        return _sim(self, kind, severity)  # type: ignore[return-value]
+        return _sim(self, kind, severity)
 
     def daltonize(self, kind: Literal["protanopia", "deuteranopia", "tritanopia"]) -> Color:
         """Adjust this color so a CVD viewer can distinguish it more easily."""
         from .cvd import daltonize as _dal
-        return _dal(self, kind)  # type: ignore[return-value]
+        return _dal(self, kind)
 
     def accessible_against(self, other: Color, *, ratio: float = 4.5,
                            direction: Literal["lighten", "darken", "auto"] = "auto") -> Color | None:
         """Return a nearby color meeting WCAG ``ratio`` against ``other``, or None."""
         from .accessibility import find_accessible_pair
-        return find_accessible_pair(self, other, ratio=ratio, direction=direction)  # type: ignore[return-value]
+        return find_accessible_pair(self, other, ratio=ratio, direction=direction)
 
     # ── Tonal palettes ────────────────────────────────────────────────────
 
     def material_palette(self) -> dict[int, Color]:
         """Material You-style 13-stop tonal palette (keys: 0–100)."""
         from .tonal import material_tonal_palette
-        return material_tonal_palette(self)  # type: ignore[return-value]
+        return material_tonal_palette(self)
 
     def tailwind(self) -> dict[int, Color]:
         """Tailwind-style 50–950 scale (11 stops)."""
         from .tonal import tailwind_scale
-        return tailwind_scale(self)  # type: ignore[return-value]
+        return tailwind_scale(self)
 
     # ── Formatting ────────────────────────────────────────────────────────
 
@@ -440,18 +458,18 @@ class Color:
     def __repr__(self) -> str:
         return f"Color({self.hex!r})"
 
+    def _key(self) -> tuple[float, float, float, float]:
+        # Equality and hashing share one quantized key so equal colors always
+        # hash equally (a tolerance-based __eq__ cannot guarantee that).
+        return (round(self._lr, 6), round(self._lg, 6), round(self._lb, 6), round(self._a, 6))
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Color):
             return NotImplemented
-        return (
-            math.isclose(self._lr, other._lr, abs_tol=1e-6)
-            and math.isclose(self._lg, other._lg, abs_tol=1e-6)
-            and math.isclose(self._lb, other._lb, abs_tol=1e-6)
-            and math.isclose(self._a, other._a, abs_tol=1e-6)
-        )
+        return self._key() == other._key()
 
     def __hash__(self) -> int:
-        return hash((round(self._lr, 6), round(self._lg, 6), round(self._lb, 6), round(self._a, 6)))
+        return hash(self._key())
 
 
 def _from_parsed(p: parsers.Parsed) -> tuple[float, float, float, float]:
@@ -471,8 +489,8 @@ def _from_parsed(p: parsers.Parsed) -> tuple[float, float, float, float]:
     if space == "hwb":
         return _from_parsed(parsers.Parsed("srgb", hwb.hwb_to_srgb(comp), a))
     if space == "lab":
-        x, y, z = lab.lab_to_xyz(comp)
-        lr, lg, lb = xyz.xyz_to_linear_rgb((x, y, z))
+        # CSS lab()/lch() are D50-relative.
+        lr, lg, lb = xyz.xyz_to_linear_rgb(lab.css_lab_to_xyz(comp))
         return lr, lg, lb, a
     if space == "lch":
         return _from_parsed(parsers.Parsed("lab", lab.lch_to_lab(comp), a))
@@ -485,7 +503,7 @@ def _from_parsed(p: parsers.Parsed) -> tuple[float, float, float, float]:
         lr, lg, lb = xyz.xyz_to_linear_rgb(comp)
         return lr, lg, lb, a
     if space == "p3":
-        x, y, z = _p3.linear_p3_to_xyz(comp)
+        x, y, z = _p3.linear_p3_to_xyz(_p3.p3_decode(comp))
         lr, lg, lb = xyz.xyz_to_linear_rgb((x, y, z))
         return lr, lg, lb, a
     raise ValueError(f"unknown space from parser: {space}")

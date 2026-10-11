@@ -13,7 +13,7 @@ def encode(c: float) -> float:
         return -encode(-c)
     if c <= 0.0031308:
         return 12.92 * c
-    return 1.055 * (c ** (1.0 / 2.4)) - 0.055
+    return 1.055 * float(c ** (1.0 / 2.4)) - 0.055
 
 
 def decode(c: float) -> float:
@@ -22,7 +22,7 @@ def decode(c: float) -> float:
         return -decode(-c)
     if c <= 0.04045:
         return c / 12.92
-    return ((c + 0.055) / 1.055) ** 2.4
+    return float(((c + 0.055) / 1.055) ** 2.4)
 
 
 def encode_rgb(rgb: tuple[float, float, float]) -> tuple[float, float, float]:

@@ -1,9 +1,9 @@
 """Perceptual colormaps for data visualization.
 
-Sequential maps (viridis/magma/plasma/inferno/cividis/turbo) are perceptually
+Sequential maps (viridis/magma/plasma/inferno/cividis) are perceptually
 uniform - equal steps in the colormap correspond to equal perceptual changes,
 which preserves data structure when reproduced in greyscale or to color-blind
-viewers. Diverging maps (RdBu, BrBG, Spectral) emphasize a center value;
+viewers. Turbo is a rainbow-style map with smoothed lightness, not uniform. Diverging maps (RdBu, BrBG, Spectral) emphasize a center value;
 qualitative maps (tab10, set1) provide categorical distinguishability.
 
 Each map is exposed as a function of a scalar t ∈ [0, 1] returning a
@@ -20,14 +20,14 @@ if TYPE_CHECKING:
     from .color import Color
 
 
-# Sequential maps - purple/blue → yellow/cream, perceptually uniform.
+# Sequential maps - 11 evenly spaced stops (t = 0, 0.1, ..., 1).
 _VIRIDIS = (
     "#440154", "#482577", "#3f4788", "#33638d", "#2a788e", "#21908c",
     "#22a884", "#44bf70", "#7ad151", "#bddf26", "#fde725",
 )
 _MAGMA = (
-    "#000004", "#180f3d", "#440f76", "#721f81", "#9f2f7f", "#cd4071",
-    "#f1605d", "#fd9668", "#feca8d", "#fcfdbf", "#fcfdbf",
+    "#000004", "#140e36", "#3b0f70", "#641a80", "#8c2981", "#b73779",
+    "#de4968", "#f7705c", "#fe9f6d", "#fecf92", "#fcfdbf",
 )
 _PLASMA = (
     "#0d0887", "#41049d", "#6a00a8", "#8f0da4", "#b12a90", "#cc4778",
@@ -42,8 +42,8 @@ _CIVIDIS = (
     "#a59c74", "#c3b369", "#e0cb59", "#f7e94d", "#ffea46",
 )
 _TURBO = (
-    "#30123b", "#4145ab", "#4675ed", "#39a2fc", "#1bcfd4", "#24eca6",
-    "#61fc6c", "#a4fc3b", "#d1e834", "#f3c63a", "#fb8022",
+    "#30123b", "#4559cb", "#3e9bfe", "#19d5cd", "#46f884", "#a4fc3c",
+    "#e1dd37", "#fea431", "#f05b12", "#c32503", "#7a0403",
 )
 
 # Diverging - anchored on a neutral midpoint.
@@ -95,7 +95,7 @@ def _sample_n(stops: tuple[str, ...], n: int) -> list[Color]:
     return [f(i / (n - 1)) for i in range(n)]
 
 
-def _qualitative(stops: tuple[str, ...]) -> Callable[[int], list[Color]]:
+def _qualitative(stops: tuple[str, ...]) -> Callable[[int | None], list[Color]]:
     def f(n: int | None = None) -> list[Color]:
         from .color import Color
         if n is None:
@@ -121,6 +121,7 @@ class _ColormapNS:
     def __call__(self, t: float) -> Color:
         if self.qualitative:
             from .color import Color
+            t = max(0.0, min(1.0, t))
             i = int(round(t * (len(self.stops) - 1)))
             return Color(self.stops[i])
         return self._continuous(t)  # type: ignore[misc]

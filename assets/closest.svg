@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 192" width="720" height="192" role="img">
+<text x="24.00" y="24.00" font-family="sans-serif" font-size="13" font-weight="600" fill="#888888" text-anchor="start">closest_n_from(#ee5544, brand) - ranked by CIEDE2000</text>
+<rect x="24.00" y="44.00" width="96.00" height="96.00" rx="12" ry="12" fill="#ee5544" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="72.00" y="97.00" font-family="sans-serif" font-size="11" font-weight="400" fill="#000000" text-anchor="middle">target</text>
+<text x="72.00" y="160.00" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="400" fill="#888888" text-anchor="middle">#ee5544</text>
+<text x="152.00" y="97.00" font-family="sans-serif" font-size="20" font-weight="400" fill="#888888" text-anchor="middle">→</text>
+<rect x="184.00" y="44.00" width="96.00" height="96.00" rx="12" ry="12" fill="#ef4444" stroke="#888888" stroke-opacity="1" stroke-width="3"/>
+<text x="232.00" y="97.00" font-family="sans-serif" font-size="12" font-weight="600" fill="#000000" text-anchor="middle">ΔE 3.9</text>
+<text x="232.00" y="160.00" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="400" fill="#888888" text-anchor="middle">#ef4444</text>
+<text x="232.00" y="178.00" font-family="sans-serif" font-size="11" font-weight="600" fill="#888888" text-anchor="middle">closest</text>
+<rect x="316.00" y="44.00" width="96.00" height="96.00" rx="12" ry="12" fill="#f59e0b" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="364.00" y="97.00" font-family="sans-serif" font-size="12" font-weight="600" fill="#000000" text-anchor="middle">ΔE 30.4</text>
+<text x="364.00" y="160.00" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="400" fill="#888888" text-anchor="middle">#f59e0b</text>
+<rect x="448.00" y="44.00" width="96.00" height="96.00" rx="12" ry="12" fill="#3b82f6" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="496.00" y="97.00" font-family="sans-serif" font-size="12" font-weight="600" fill="#000000" text-anchor="middle">ΔE 45.8</text>
+<text x="496.00" y="160.00" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="400" fill="#888888" text-anchor="middle">#3b82f6</text>
+<rect x="580.00" y="44.00" width="96.00" height="96.00" rx="12" ry="12" fill="#10b981" stroke="#888888" stroke-opacity="0.25" stroke-width="1"/>
+<text x="628.00" y="97.00" font-family="sans-serif" font-size="12" font-weight="600" fill="#000000" text-anchor="middle">ΔE 67.7</text>
+<text x="628.00" y="160.00" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="400" fill="#888888" text-anchor="middle">#10b981</text>
+</svg>

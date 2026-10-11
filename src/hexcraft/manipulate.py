@@ -10,14 +10,30 @@ if TYPE_CHECKING:
 
 _HUE_SPACES = {"hsl", "hsv", "hwb", "lch", "oklch"}
 
+# OKLCh chroma below which a color is treated as achromatic (hue is powerless).
+_ACHROMATIC_CHROMA = 1e-4
+
 
 def _shortest_hue(h1: float, h2: float, t: float) -> float:
     diff = ((h2 - h1 + 540.0) % 360.0) - 180.0
     return (h1 + diff * t) % 360.0
 
 
+def _is_achromatic(c: Color) -> bool:
+    return c.oklch[1] < _ACHROMATIC_CHROMA
+
+
+def _powerless_hues(a: Color, b: Color, h1: float, h2: float) -> tuple[float, float]:
+    """Per CSS Color 4, an achromatic color's hue is missing and takes the other's hue."""
+    if _is_achromatic(a):
+        h1 = h2
+    elif _is_achromatic(b):
+        h2 = h1
+    return h1, h2
+
+
 def mix(a: Color, b: Color, t: float = 0.5,
-        *, space: Literal["srgb", "linear-rgb", "hsl", "hsv", "hwb", "lab", "lch", "oklab", "oklch"] = "oklab") -> Color:
+        *, space: Literal["srgb", "linear-rgb", "hsl", "hsv", "hwb", "lab", "lch", "oklab", "oklch", "xyz"] = "oklab") -> Color:
     """Mix two colors. ``t`` is the weight of ``b`` (0 → a, 1 → b)."""
     from .color import Color
     t = max(0.0, min(1.0, t))
@@ -40,6 +56,7 @@ def mix(a: Color, b: Color, t: float = 0.5,
     if space == "oklch":
         L1, c1, h1 = a.oklch
         L2, c2, h2 = b.oklch
+        h1, h2 = _powerless_hues(a, b, h1, h2)
         return Color.from_oklch(_lerp(L1, L2, t), _lerp(c1, c2, t), _shortest_hue(h1, h2, t), _lerp(a.alpha, b.alpha, t))
     if space == "lab":
         L1, a1, b1 = a.lab
@@ -48,18 +65,26 @@ def mix(a: Color, b: Color, t: float = 0.5,
     if space == "lch":
         L1, c1, h1 = a.lch
         L2, c2, h2 = b.lch
+        h1, h2 = _powerless_hues(a, b, h1, h2)
         return Color.from_lch(_lerp(L1, L2, t), _lerp(c1, c2, t), _shortest_hue(h1, h2, t), _lerp(a.alpha, b.alpha, t))
     if space == "hsl":
         h1, s1, L1 = a.hsl
         h2, s2, L2 = b.hsl
+        h1, h2 = _powerless_hues(a, b, h1, h2)
         return Color.from_hsl(_shortest_hue(h1, h2, t), _lerp(s1, s2, t), _lerp(L1, L2, t), _lerp(a.alpha, b.alpha, t))
     if space == "hsv":
         h1, s1, v1 = a.hsv
         h2, s2, v2 = b.hsv
+        h1, h2 = _powerless_hues(a, b, h1, h2)
         return Color.from_hsv(_shortest_hue(h1, h2, t), _lerp(s1, s2, t), _lerp(v1, v2, t), _lerp(a.alpha, b.alpha, t))
+    if space == "xyz":
+        x1, y1, z1 = a.xyz
+        x2, y2, z2 = b.xyz
+        return Color.from_xyz(_lerp(x1, x2, t), _lerp(y1, y2, t), _lerp(z1, z2, t), _lerp(a.alpha, b.alpha, t))
     if space == "hwb":
         h1, w1, b1 = a.hwb
         h2, w2, b2 = b.hwb
+        h1, h2 = _powerless_hues(a, b, h1, h2)
         return Color.from_hwb(_shortest_hue(h1, h2, t), _lerp(w1, w2, t), _lerp(b1, b2, t), _lerp(a.alpha, b.alpha, t))
     raise ValueError(f"unknown mixing space: {space}")
 

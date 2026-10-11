@@ -8,11 +8,11 @@ Supported syntax:
 - rgb(r, g, b) / rgb(r g b / a) / rgba(...)
 - hsl(h, s%, l%) / hsl(h s% l% / a) / hsla(...)
 - hwb(h w% b% / a)
-- lab(L a b / a)        - L in % or [0..100], a/b numeric or %
-- lch(L c h / a)        - L in % or [0..100], c numeric or %, h deg
+- lab(L a b / a)        - L in % or [0..100], a/b numeric or % (D50, per CSS)
+- lch(L c h / a)        - L in % or [0..100], c numeric or %, h deg (D50)
 - oklab(L a b / a)      - L in % or [0..1], a/b numeric or % (-0.4..0.4)
 - oklch(L c h / a)      - L in % or [0..1], c numeric or % (0..0.4), h deg
-- color(srgb r g b / a) - also srgb-linear, display-p3, rec2020 (limited)
+- color(srgb r g b / a) - also srgb-linear, display-p3, xyz/xyz-d65
 - CSS named colors
 """
 
@@ -219,6 +219,15 @@ def parse(s: str) -> Parsed:
     ``oklab()``, ``oklch()``, ``color(...)``), and any of the 148 CSS named
     colors. Raises ``ColorParseError`` on invalid input.
     """
+    try:
+        return _parse(s)
+    except ColorParseError:
+        raise
+    except ValueError as e:
+        raise ColorParseError(f"could not parse color: {s.strip()!r} ({e})") from e
+
+
+def _parse(s: str) -> Parsed:
     s = s.strip()
     if not s:
         raise ColorParseError("empty color string")

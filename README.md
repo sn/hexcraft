@@ -7,7 +7,7 @@
 The complete color library for Python. Parse, convert, manipulate, mix, measure, and visualize color across 11 color spaces - with zero required dependencies and a single fluent `Color` API.
 
 [![PyPI](https://img.shields.io/pypi/v/hexcraft?color=green)](https://pypi.org/project/hexcraft/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hexcraft)](https://pypi.org/project/hexcrat/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/hexcraft)](https://pypi.org/project/hexcraft/)
 [![PyPI - License](https://img.shields.io/pypi/l/hexcraft)](https://pypi.org/project/hexcraft/)
 [![image](https://img.shields.io/github/actions/workflow/status/sn/hexcraft/test.yml?branch=main)](https://github.com/sn/hexcraft/actions?query=branch%3Amain)
 
@@ -62,7 +62,6 @@ c.simulate("deuteranopia")  # color as seen by red-green color-blind viewers
 ```bash
 pip install hexcraft             # core, zero dependencies
 pip install 'hexcraft[numpy]'    # vectorized array ops + image utilities
-pip install 'hexcraft[science]'  # full color-science integration (reserved)
 pip install 'hexcraft[dev]'      # tests, ruff, mypy
 ```
 
@@ -147,6 +146,10 @@ viewing-tips section.
 
 ## Parsing
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/parsing.svg" alt="The CSS color tomato written as a named color, hex, rgb(), hsl(), hwb(), lab(), lch(), oklab(), oklch() and color(display-p3), each string parsed back by Color() to the same #ff6347 swatch" width="100%">
+</p>
+
 > See it: [`02_parsing_anything.py`](examples/02_parsing_anything.py)
 
 `Color(value)` accepts every CSS Color 4 syntax, all 148 CSS named colors, hex with optional alpha, and existing `Color` objects:
@@ -213,15 +216,15 @@ parse("oklch(0.7 0.15 250)")  # Parsed(space='oklch', components=(0.7, 0.15, 250
 | HSV            | `c.hsv`              | `Color.from_hsv(0, 1, 1)`               |
 | HWB            | `c.hwb`              | `Color.from_hwb(0, 0, 0)`               |
 | CIE XYZ (D65)  | `c.xyz`              | `Color.from_xyz(0.412, 0.213, 0.019)`   |
-| CIE Lab        | `c.lab`              | `Color.from_lab(54, 81, 70)`            |
-| CIE LCh        | `c.lch`              | `Color.from_lch(54, 107, 41)`           |
+| CIE Lab        | `c.lab`              | `Color.from_lab(53.24, 80.09, 67.2)`    |
+| CIE LCh        | `c.lch`              | `Color.from_lch(53.24, 104.55, 40)`     |
 | OKLab          | `c.oklab`            | `Color.from_oklab(0.63, 0.22, 0.13)`    |
 | OKLCh          | `c.oklch`            | `Color.from_oklch(0.63, 0.26, 29)`      |
 | Display-P3     | `c.p3`               | `Color.from_p3(1, 0, 0)`                |
 | CMYK (naive)   | `c.cmyk`             | `Color.from_cmyk(0, 1, 1, 0)`           |
 | Kelvin (CCT)   | `c.kelvin`           | `Color.from_kelvin(2700)`               |
 
-`hsl/hsv/hwb` use degrees for hue; `lab/lch/oklab/oklch` use the CIE/OK natural units. Hue is in `[0, 360)`. CMYK is naive algebraic - see [CMYK](#cmyk) for caveats.
+`hsl/hsv/hwb` use degrees for hue; `lab/lch/oklab/oklch` use the CIE/OK natural units. `c.lab`/`c.lch` are D65-relative; CSS `lab()`/`lch()` strings are D50-relative per the CSS spec, and parsing/`c.css()` convert between the two. Hue is in `[0, 360)`. CMYK is naive algebraic - see [CMYK](#cmyk) for caveats.
 
 ---
 
@@ -246,7 +249,7 @@ c.oklab           # (0.65, -0.06, -0.12)
 c.oklch           # (0.65, 0.13, 242.7)
 c.p3              # (0.252, 0.589, 0.851)
 c.cmyk            # (0.76, 0.31, 0.0, 0.14)
-c.kelvin          # ~10500 (or None for non-blackbody chromaticities)
+c.kelvin          # None - too saturated; CCT is only defined near the blackbody locus
 
 c.luminance   # 0.281 - WCAG relative luminance
 c.name        # 'dodgerblue' - closest CSS named color
@@ -258,6 +261,10 @@ c.in_gamut()  # True/False - within sRGB
 ---
 
 ## Manipulation
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/manipulation.svg" alt="#3498db transformed by lighten, darken, saturate, desaturate, rotate(60), grayscale and invert, each result shown as a labelled swatch" width="100%">
+</p>
 
 Every method is immutable and returns a new `Color`. Operations work in OKLCh by default for perceptual uniformity.
 
@@ -271,11 +278,11 @@ c.desaturate(0.2)
 c.rotate(60)     # rotate hue by 60°
 c.complement()   # rotate(180)
 c.grayscale()    # collapse chroma to 0
-c.invert()       # 1 - rgb in linear sRGB
+c.invert()       # 1 - rgb in gamma-encoded sRGB, like CSS invert()
 c.with_alpha(0.5)
 ```
 
-Equality and hashing use linear-sRGB tolerance (≈ 1e-6) and are well-behaved across round-trips:
+Equality and hashing compare linear sRGB rounded to 6 decimals, so they agree with each other and are well-behaved across round-trips:
 
 ```python
 Color("red") == Color("#ff0000") == Color("rgb(255, 0, 0)")  # True
@@ -343,7 +350,7 @@ analogous(c, count=5, spread=20) # N colors spaced by 20° hue
 shades(c, count=5)         # toward black
 tints(c, count=5)          # toward white
 tones(c, count=5)          # toward equal-lightness gray
-monochromatic(c, count=7)  # full lightness ramp at fixed hue/chroma
+monochromatic(c, count=7)  # black-to-white ramp at fixed hue, gamut-mapped
 
 # Method-style (return type-stable lists):
 c.tints(10)
@@ -352,6 +359,10 @@ c.darker(10)   # alias for .shades()
 c.triadic()
 c.analogous(count=5)
 ```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/scales.svg" alt="Seven-step tints, shades, tones and monochromatic ramps generated from #3498db" width="100%">
+</p>
 
 Two-color and multi-stop scales:
 
@@ -376,9 +387,9 @@ stops([Color("red"), Color("green"), Color("blue")], steps=20, space="oklab")
 c = Color("#3498db")
 
 c.material_palette()
-# {0: '#000000', 10: '#00040a', 20: '#00182a', 30: '#00314f', 40: '#004c77',
-#  50: '#0069a1', 60: '#1d87c9', 70: '#45a7eb', 80: '#7bc6ff', 90: '#c0e3ff',
-#  95: '#e0f1ff', 99: '#f9fcff', 100: '#ffffff'}
+# {0: '#000000', 10: '#001d32', 20: '#003352', 30: '#004a74', 40: '#006399',
+#  50: '#057dbe', 60: '#3398db', 70: '#52b3f8', 80: '#8dcdff', 90: '#c8e6ff',
+#  95: '#e4f3ff', 99: '#fafdff', 100: '#ffffff'}
 
 c.tailwind()
 # {50: '#edf7ff', 100: '#d4ebff', 200: '#9fd5ff', 300: '#65b3ed', 400: '#308ecc',
@@ -386,7 +397,7 @@ c.tailwind()
 #  950: '#000a16'}
 ```
 
-Both implementations build on OKLCh - they preserve the source hue, hold chroma roughly constant for Material, and ramp chroma for Tailwind so the extreme stops stay legible. Out-of-gamut points are folded back into sRGB via OKLCh chroma reduction.
+Both implementations build on OKLCh - they preserve the source hue, hold chroma roughly constant for Material, and ramp chroma for Tailwind so the extreme stops stay legible. Material tones are CIE L* (as in Material's HCT), so tone differences keep Material's contrast guarantees. Out-of-gamut points are folded back into sRGB via OKLCh chroma reduction.
 
 ```python
 from hexcraft import (
@@ -531,7 +542,11 @@ Rough thresholds for CIEDE2000: `<1` imperceptible, `1–2` perceptible to a tra
 
 ## Gamut mapping
 
-When a color exceeds sRGB (e.g., `oklch(0.7 0.4 30)` is more saturated than sRGB can show), `to_gamut()` reduces its OKLCh chroma until it fits, preserving lightness and hue (CSS Color 4 algorithm):
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/gamut.svg" alt="24 out-of-gamut oklch(0.7 0.3 h) colors brought into sRGB two ways: per-channel clip(), which drifts hue by up to 29 degrees, and to_gamut(), which reduces chroma and keeps hue" width="100%">
+</p>
+
+When a color exceeds sRGB (e.g., `oklch(0.7 0.4 30)` is more saturated than sRGB can show), `to_gamut()` reduces its OKLCh chroma until it fits, preserving lightness and hue (a simplified form of the CSS Color 4 algorithm):
 
 ```python
 wide = Color.from_oklch(0.7, 0.4, 30)
@@ -601,7 +616,7 @@ Color.from_kelvin(6500).hex  # '#fffefa'  D65 (sRGB white point)
 Color.from_kelvin(9000).hex  # '#d2dfff'  cool blue
 
 c = Color("#fffefa")
-c.kelvin  # ~6300 K (returns None outside ~2000–25000 K)
+c.kelvin  # ~6300 K (None if far from the blackbody locus or outside 1000–25000 K)
 ```
 
 Forward direction uses Tanner Helland's piecewise approximation. Inverse (CCT from a color) uses McCamy's cubic in CIE xy chromaticity. Both are visualization-grade, not photometric.
@@ -609,6 +624,10 @@ Forward direction uses Tanner Helland's piecewise approximation. Inverse (CCT fr
 ---
 
 ## Closest match in a palette
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/closest.svg" alt="Target #ee5544 compared with a four-color brand palette, ranked by CIEDE2000: #ef4444 is closest at Delta E 3.9, then #f59e0b, #3b82f6 and #10b981" width="100%">
+</p>
 
 > See it: [`10_brand_color_match.py`](examples/10_brand_color_match.py)
 
@@ -725,17 +744,20 @@ average_color(img)
 
 Installing `hexcraft` registers a `hexcraft` console script. Output uses ANSI 24-bit color blocks when stdout is a TTY.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sn/hexcraft/main/assets/cli.svg" alt="Terminal output of hexcraft inspect for #3498db and hexcraft contrast for #888 on white, with color blocks next to each hex value" width="100%">
+</p>
+
 ```text
 $ hexcraft inspect "#3498db"
 #3498db
   hex      #3498db
   rgb      rgb(52, 152, 219)
   hsl      hsl(204.1 69.9% 53.1%)
-  lab      lab(60.2 -6.1 -42.2)
+  lab      lab(59.5 -12.1 -43.1)
   oklch    oklch(0.653 0.135 242.7)
   cmyk     76.3% 30.6% 0.0% 14.1%
   luma     0.2830
-  kelvin   ~10500 K
   name     dodgerblue
   in sRGB  True
 ```
@@ -746,8 +768,8 @@ oklch(0.628 0.258 29.23)
 
 $ hexcraft palette "#3498db" --type material
        0  #000000
-      10  #00040a
-      20  #00182a
+      10  #001d32
+      20  #003352
       ...
      100  #ffffff
 
@@ -762,7 +784,7 @@ $ hexcraft contrast "#888" white
   WCAG ratio  3.54:1
   AA          FAIL  (large: PASS)
   AAA         FAIL  (large: FAIL)
-  APCA Lc     -63.1
+  APCA Lc     +63.1
   → try fg #777777 for AA
 
 $ hexcraft closest "#ee5544" "#3b82f6" "#10b981" "#ef4444" "#f59e0b"

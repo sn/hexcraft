@@ -52,13 +52,15 @@ def _mul(m: tuple[tuple[float, float, float], ...], v: tuple[float, float, float
 def _interp_identity(m: tuple[tuple[float, float, float], ...], severity: float) -> tuple[tuple[float, float, float], ...]:
     """Lerp between identity matrix (0.0) and full-CVD matrix (1.0)."""
     s = max(0.0, min(1.0, severity))
-    return tuple(
-        tuple(
-            (1.0 - s) * (1.0 if i == j else 0.0) + s * m[i][j]
-            for j in range(3)
+
+    def row(i: int) -> tuple[float, float, float]:
+        return (
+            (1.0 - s) * (i == 0) + s * m[i][0],
+            (1.0 - s) * (i == 1) + s * m[i][1],
+            (1.0 - s) * (i == 2) + s * m[i][2],
         )
-        for i in range(3)
-    )  # type: ignore[return-value]
+
+    return (row(0), row(1), row(2))
 
 
 def simulate(c: Color, kind: CVDType, severity: float = 1.0) -> Color:

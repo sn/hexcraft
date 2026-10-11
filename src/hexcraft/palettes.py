@@ -44,15 +44,18 @@ def square(c: Color) -> list[Color]:
 
 
 def monochromatic(c: Color, *, count: int = 5) -> list[Color]:
-    """Lightness ramp around the input, evenly spaced in OKLab L."""
+    """Black-to-white ramp at ``c``'s hue, evenly spaced in OKLab L.
+
+    Each step keeps the source chroma where sRGB allows and is gamut-mapped
+    (chroma reduced) where it doesn't.
+    """
     if count < 1:
         return []
     if count == 1:
         return [c]
-    L, ch, h = c.oklch
-    from .color import Color as _C
-    Ls = [i / (count - 1) for i in range(count)]
-    return [_C.from_oklch(t, ch, h, c.alpha) for t in Ls]
+    from .tonal import _gamut_clip_oklch
+    _, ch, h = c.oklch
+    return [_gamut_clip_oklch(i / (count - 1), ch, h, c.alpha) for i in range(count)]
 
 
 def shades(c: Color, *, count: int = 5) -> list[Color]:
@@ -73,7 +76,7 @@ def tones(c: Color, *, count: int = 5) -> list[Color]:
     """Steps from the color toward neutral gray of equal lightness."""
     from .color import Color as _C
     L, _, _ = c.oklch
-    gray = _C.from_oklch(L, 0.0, 0.0)
+    gray = _C.from_oklch(L, 0.0, 0.0, c.alpha)
     return [_mix(c, gray, i / (count - 1) if count > 1 else 0, space="oklab") for i in range(count)]
 
 

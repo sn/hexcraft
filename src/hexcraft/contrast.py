@@ -47,7 +47,7 @@ _LO_CLIP = 0.1
 def _apca_y(c: Color) -> float:
     """APCA-style screen Y from gamma-encoded sRGB with simple ^2.4 (not the toe)."""
     r, g, b = (max(0.0, min(1.0, x)) for x in c.srgb)
-    return 0.2126729 * (r ** 2.4) + 0.7151522 * (g ** 2.4) + 0.0721750 * (b ** 2.4)
+    return float(0.2126729 * (r ** 2.4) + 0.7151522 * (g ** 2.4) + 0.0721750 * (b ** 2.4))
 
 
 def apca_lc(text: Color, bg: Color) -> float:
@@ -77,4 +77,4 @@ def apca_lc(text: Color, bg: Color) -> float:
         if c > -_LO_CLIP:
             return 0.0
         out = c + _LO_WoB_OFFSET
-    return out * 100.0
+    return float(out * 100.0)

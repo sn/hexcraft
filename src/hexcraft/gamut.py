@@ -1,8 +1,9 @@
 """Gamut mapping.
 
-CSS Color 4 algorithm: bisect chroma in OKLCh until the result is in-gamut for
-the target space, while keeping lightness and hue. Falls back to clipping if
-the search degenerates.
+Bisect chroma in OKLCh, keeping lightness and hue, until the color fits the
+target gamut, then clip away any residual error. This is a simplified form of
+the CSS Color 4 algorithm: it omits the "clip if within a JND" shortcut, so it
+can return slightly less chroma than a browser would.
 """
 
 from __future__ import annotations
@@ -13,7 +14,6 @@ if TYPE_CHECKING:
     from .color import Color
 
 
-_JND = 0.02
 _EPSILON = 0.0001
 
 
@@ -22,7 +22,7 @@ def _in_srgb_gamut(c: Color, tol: float = _EPSILON) -> bool:
 
 
 def map_to_gamut(c: Color, *, space: Literal["srgb"] = "srgb") -> Color:
-    """Reduce OKLCh chroma until ``c`` is in ``space``'s gamut. Returns clipped sRGB."""
+    """Reduce OKLCh chroma until ``c`` is in ``space``'s gamut, preserving L and h."""
     from .color import Color as _C
 
     if space != "srgb":

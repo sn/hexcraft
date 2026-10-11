@@ -4,8 +4,8 @@ Numpy is required. Two algorithms are offered:
 
 - ``"kmeans"`` - Lloyd's algorithm in OKLab (perceptually meaningful clusters).
   k-means++ seeding for stability. Default.
-- ``"median_cut"`` - Heckbert's classic algorithm in linear sRGB. Faster, more
-  deterministic, slightly less perceptual.
+- ``"median_cut"`` - Heckbert's classic algorithm on gamma-encoded sRGB values.
+  Faster, more deterministic, slightly less perceptual.
 
 Both accept a numpy array of shape (H, W, 3) or (N, 3) with sRGB values in
 [0, 1]. uint8 arrays are auto-scaled.
@@ -38,6 +38,21 @@ def _normalize(image: np.ndarray) -> np.ndarray:
     return arr
 
 
+# Points per block when assigning pixels to centroids. Bounds the temporary
+# (chunk, k, channels) distance array instead of allocating it for every pixel.
+_ASSIGN_CHUNK = 65_536
+
+
+def _assign(points: np.ndarray, centroids: np.ndarray) -> np.ndarray:
+    """Index of the nearest centroid for each point, computed in fixed-size blocks."""
+    labels = np.empty(points.shape[0], dtype=np.intp)
+    for start in range(0, points.shape[0], _ASSIGN_CHUNK):
+        block = points[start:start + _ASSIGN_CHUNK]
+        d2 = ((block[:, None, :] - centroids[None, :, :]) ** 2).sum(axis=2)
+        labels[start:start + _ASSIGN_CHUNK] = d2.argmin(axis=1)
+    return labels
+
+
 def _kmeanspp_init(points: np.ndarray, k: int, rng: np.random.Generator) -> np.ndarray:
     n = points.shape[0]
     centroids = np.empty((k, points.shape[1]))
@@ -59,8 +74,7 @@ def _kmeans(points: np.ndarray, k: int, *, max_iter: int, seed: int | None) -> t
     rng = np.random.default_rng(seed)
     centroids = _kmeanspp_init(points, k, rng)
     for _ in range(max_iter):
-        d2 = ((points[:, None, :] - centroids[None, :, :]) ** 2).sum(axis=2)
-        labels = d2.argmin(axis=1)
+        labels = _assign(points, centroids)
         new = np.empty_like(centroids)
         for j in range(k):
             mask = labels == j
@@ -111,7 +125,7 @@ def dominant_colors(
       Values in [0, 1] floating-point or [0, 255] uint8.
     method:
       ``"kmeans"`` clusters in OKLab (perceptual). ``"median_cut"`` runs
-      Heckbert's algorithm in linear sRGB.
+      Heckbert's algorithm on gamma-encoded sRGB.
     sample:
       If the input has more than ``sample`` pixels, a random subsample is used
       for speed. Pass ``None`` to disable subsampling.

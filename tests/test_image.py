@@ -59,3 +59,13 @@ def test_average_color_gray_via_linear_avg():
     avg = average_color(img)
     r, g, b = avg.rgb
     assert 180 <= r <= 195 and r == g == b
+
+
+def test_kmeans_chunked_assignment_matches_unchunked(monkeypatch):
+    """Pixel-to-centroid assignment is chunked to bound memory; results must not change."""
+    import hexcraft.image as image_mod
+
+    img = np.random.default_rng(1).random((40, 40, 3))
+    expected = dominant_colors(img, n=5, seed=0, sample=None)
+    monkeypatch.setattr(image_mod, "_ASSIGN_CHUNK", 7)
+    assert dominant_colors(img, n=5, seed=0, sample=None) == expected

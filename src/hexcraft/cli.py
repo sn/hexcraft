@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import argparse
 import sys
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 
 from . import (
     Color,
@@ -35,6 +35,7 @@ from .palettes import (
     tints,
     triadic,
 )
+from .spaces.lab import xyz_to_css_lab
 
 
 def _bar(c: Color, width: int = 6) -> str:
@@ -48,7 +49,7 @@ def _bar(c: Color, width: int = 6) -> str:
 def _cmd_inspect(args: argparse.Namespace) -> int:
     c = Color(args.color)
     bar = _bar(c)
-    L_lab, A, B = c.lab
+    L_lab, A, B = xyz_to_css_lab(c.xyz)
     L_ok, c_ok, h_ok = c.oklch
     h, s, l = c.hsl
     print(f"{bar}")
@@ -59,8 +60,9 @@ def _cmd_inspect(args: argparse.Namespace) -> int:
     print(f"  oklch    oklch({L_ok:.3f} {c_ok:.3f} {h_ok:.1f})")
     print(f"  cmyk     {' '.join(f'{v * 100:.1f}%' for v in c.cmyk)}")
     print(f"  luma     {c.luminance:.4f}")
-    if c.kelvin is not None:
-        print(f"  kelvin   ~{c.kelvin:.0f} K")
+    kelvin = c.kelvin
+    if kelvin is not None:
+        print(f"  kelvin   ~{kelvin:.0f} K")
     print(f"  name     {c.name}")
     print(f"  in sRGB  {c.in_gamut()}")
     return 0
@@ -74,6 +76,7 @@ def _cmd_convert(args: argparse.Namespace) -> int:
 def _cmd_palette(args: argparse.Namespace) -> int:
     c = Color(args.color)
     type_ = args.type
+    items: Iterable[tuple[int, Color]]
     if type_ == "material":
         items = material_tonal_palette(c).items()
     elif type_ == "tailwind":
@@ -176,7 +179,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
-        return args.func(args)
+        rc: int = args.func(args)
+        return rc
     except ColorParseError as e:
         print(f"hexcraft: {e}", file=sys.stderr)
         return 2

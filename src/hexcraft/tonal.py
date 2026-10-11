@@ -1,8 +1,9 @@
 """Tonal palette generation: Material You and Tailwind-style scales.
 
 Both build on OKLCh: hold the source's hue (and chroma, gamut-permitting)
-constant while stepping perceptual lightness. This is the same approach
-Material's HCT system and modern design systems use.
+constant while stepping lightness. Material tones follow Material's HCT
+definition, where tone T is CIE L* = T, so tone differences carry Material's
+contrast guarantees; Tailwind stops step OKLab lightness.
 """
 
 from __future__ import annotations
@@ -45,14 +46,29 @@ def _gamut_clip_oklch(L: float, C: float, h: float, alpha: float) -> Color:
     return map_to_gamut(raw)
 
 
+def _at_lstar(lstar: float, C: float, h: float, alpha: float) -> Color:
+    """In-gamut color at OKLCh hue ``h`` and chroma ≤ ``C`` whose CIE L* is ``lstar``."""
+    if lstar <= 0.0 or lstar >= 100.0:
+        return _gamut_clip_oklch(lstar / 100.0, C, h, alpha)
+    lo, hi = 0.0, 1.0
+    for _ in range(30):
+        mid = (lo + hi) / 2.0
+        if _gamut_clip_oklch(mid, C, h, alpha).lab[0] < lstar:
+            lo = mid
+        else:
+            hi = mid
+    return _gamut_clip_oklch((lo + hi) / 2.0, C, h, alpha)
+
+
 def material_tonal_palette(c: Color) -> dict[int, Color]:
     """Material You-style tonal palette from a source color.
 
-    Returns 13 colors keyed by tone (0–100). Hue is preserved; chroma is taken
-    from the source and clamped per-tone to remain in sRGB gamut.
+    Returns 13 colors keyed by tone (0–100), where tone is CIE L* as in
+    Material's HCT. Hue is preserved; chroma is taken from the source and
+    reduced per-tone to remain in sRGB gamut.
     """
     _, C, h = c.oklch
-    return {tone: _gamut_clip_oklch(tone / 100.0, C, h, c.alpha) for tone in MATERIAL_TONES}
+    return {tone: _at_lstar(float(tone), C, h, c.alpha) for tone in MATERIAL_TONES}
 
 
 def tailwind_scale(c: Color) -> dict[int, Color]:
